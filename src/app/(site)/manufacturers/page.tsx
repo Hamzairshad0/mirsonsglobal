@@ -6,7 +6,8 @@ import { MANUFACTURER_PROCESS, WHAT_YOU_RECEIVE } from "@/lib/process";
 import { Icon } from "@/components/Icon";
 import { FormPanel } from "@/components/FormPanel";
 import { ManufacturerForm } from "@/components/forms/Forms";
-import { CheckList, NumberedSteps, PageHero, SectionHeading } from "@/components/ui";
+import Image from "next/image";
+import { CheckList, delay, NumberedSteps, PageHero, SectionHeading } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "For Manufacturers & Suppliers",
@@ -41,6 +42,7 @@ export default async function ManufacturersPage() {
   return (
     <>
       <PageHero
+        image="/images/steel-mill.webp"
         eyebrow="For manufacturers & suppliers"
         title="We build B2B sales pipelines for industrial manufacturers"
         intro="Find distributors, importers and commercial buyers in international markets — and turn them into qualified sales conversations."
@@ -61,8 +63,8 @@ export default async function ManufacturersPage() {
             intro="Your products may already have demand in international markets. The problem is finding the companies actually capable of buying, importing, distributing or selling them."
           />
           <ul className="mt-14 grid gap-6 md:grid-cols-3">
-            {PAINS.map((p) => (
-              <li key={p.title} className="border-t-2 border-gold-500 pt-6">
+            {PAINS.map((p, i) => (
+              <li key={p.title} data-reveal style={delay(i, 120)} className="border-t-2 border-gold-500 pt-6">
                 <h3 className="text-xl font-semibold text-navy-900">{p.title}</h3>
                 <p className="mt-3 leading-relaxed text-muted">{p.text}</p>
               </li>
@@ -71,7 +73,9 @@ export default async function ManufacturersPage() {
         </div>
       </section>
 
-      <section className="on-dark bg-navy-900 py-20 text-white sm:py-28">
+      <section className="on-dark relative isolate overflow-hidden bg-navy-900 py-20 text-white sm:py-28">
+        <Image src="/images/factory-interior.webp" alt="" fill quality={50} sizes="100vw" className="-z-20 object-cover opacity-30" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-navy-900 via-navy-900/90 to-navy-900/75" aria-hidden />
         <div className="container-x grid gap-14 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
           <SectionHeading
             eyebrow="Who we find for you"
@@ -80,8 +84,13 @@ export default async function ManufacturersPage() {
             dark
           />
           <ul className="grid gap-4 sm:grid-cols-2">
-            {buyerTypes.map((b) => (
-              <li key={b.title} className="flex gap-4 rounded-xl bg-white/5 p-5 ring-1 ring-white/10">
+            {buyerTypes.map((b, i) => (
+              <li
+                key={b.title}
+                data-reveal
+                style={delay(i, 60)}
+                className="flex gap-4 rounded-xl bg-white/5 p-5 ring-1 ring-white/10 backdrop-blur-sm transition-colors duration-300 hover:bg-white/10 hover:ring-gold-500/50"
+              >
                 <Icon name={b.icon} className="h-6 w-6 shrink-0 text-gold-400" />
                 <div>
                   <h3 className="font-sans text-base font-semibold">{b.title}</h3>
@@ -110,16 +119,16 @@ export default async function ManufacturersPage() {
               title="Everything required to open a new market"
               intro="We don't sell generic “digital marketing”. We build targeted B2B sales pipelines."
             />
-            <div className="mt-10">
+            <div data-reveal className="mt-10">
               <CheckList items={WHAT_YOU_RECEIVE} cols={2} />
             </div>
           </div>
-          <div>
+          <div data-reveal>
             <h3 className="text-xl font-semibold text-navy-900">Markets we target</h3>
             <ul className="mt-6 divide-y divide-line border-y border-line">
               {markets.map((m) => (
-                <li key={m.name} className="flex flex-col gap-1 py-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
-                  <span className="font-serif text-lg font-semibold text-navy-900">{m.name}</span>
+                <li key={m.name} className="group flex flex-col gap-1 py-4 transition-colors hover:bg-ivory sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
+                  <span className="font-serif text-lg font-semibold text-navy-900 transition-transform duration-300 group-hover:translate-x-1">{m.name}</span>
                   <span className="text-sm text-muted sm:text-right">{m.description}</span>
                 </li>
               ))}

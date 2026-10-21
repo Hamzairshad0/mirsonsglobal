@@ -15,25 +15,57 @@ export function PageHero({
   eyebrow,
   title,
   intro,
+  image,
   children,
 }: {
   eyebrow: string;
   title: string;
   intro?: string;
+  /** Background photo (e.g. /images/warehouse.webp) shown on the right behind a navy gradient. */
+  image?: string;
   children?: React.ReactNode;
 }) {
   return (
-    <section className="on-dark relative overflow-hidden bg-navy-900 pt-36 pb-20 text-white sm:pt-40 sm:pb-24">
-      <WorldMap className="absolute top-1/2 right-[-12%] w-[110%] max-w-none -translate-y-1/2 opacity-45 sm:w-[85%] lg:right-[-6%] lg:w-[68%]" />
-      <div className="absolute inset-0 bg-gradient-to-r from-navy-900 via-navy-900/90 to-navy-900/30" aria-hidden />
+    <section className="on-dark relative isolate overflow-hidden bg-navy-900 pt-36 pb-20 text-white sm:pt-40 sm:pb-24">
+      {image && (
+        <div className="absolute inset-y-0 right-0 -z-10 w-full lg:w-[62%]" aria-hidden>
+          {/* On phones the photo sits under a ~90% overlay, so a half-resolution copy is enough (smaller LCP download) */}
+          <Image src={image} alt="" fill priority quality={55} sizes="(min-width: 1024px) 62vw, 50vw" className="ken-burns object-cover" />
+        </div>
+      )}
+      <div
+        className={`absolute inset-0 -z-10 ${
+          image
+            ? "bg-gradient-to-r from-navy-900 via-navy-900/92 to-navy-900/45 lg:via-navy-900/80 lg:to-navy-900/20"
+            : "bg-gradient-to-r from-navy-900 via-navy-900/90 to-navy-900/30"
+        }`}
+        aria-hidden
+      />
+      <WorldMap className="absolute top-1/2 right-[-12%] -z-10 w-[110%] max-w-none -translate-y-1/2 opacity-40 sm:w-[85%] lg:right-[-6%] lg:w-[68%]" />
+      <div className="absolute inset-x-0 bottom-0 -z-10 h-24 bg-gradient-to-t from-navy-900/80 to-transparent" aria-hidden />
       <div className="container-x relative">
-        <p className="eyebrow">{eyebrow}</p>
-        <h1 className="mt-6 max-w-3xl text-4xl leading-[1.1] font-semibold sm:text-5xl lg:text-[3.4rem]">{title}</h1>
-        {intro && <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/75 sm:text-lg">{intro}</p>}
-        {children && <div className="mt-9 flex flex-wrap gap-4">{children}</div>}
+        <p className="eyebrow rise">{eyebrow}</p>
+        <h1 className="rise mt-6 max-w-3xl text-4xl leading-[1.1] font-semibold sm:text-5xl lg:text-[3.4rem]" style={{ "--d": "80ms" } as React.CSSProperties}>
+          {title}
+        </h1>
+        {intro && (
+          <p className="rise mt-6 max-w-2xl text-base leading-relaxed text-white/75 sm:text-lg" style={{ "--d": "160ms" } as React.CSSProperties}>
+            {intro}
+          </p>
+        )}
+        {children && (
+          <div className="rise mt-9 flex flex-wrap gap-4" style={{ "--d": "240ms" } as React.CSSProperties}>
+            {children}
+          </div>
+        )}
       </div>
     </section>
   );
+}
+
+/** Staggered reveal delay helper: style={delay(i)} */
+export function delay(i: number, step = 80): React.CSSProperties {
+  return { "--d": `${Math.min(i, 8) * step}ms` } as React.CSSProperties;
 }
 
 export function SectionHeading({
@@ -50,7 +82,7 @@ export function SectionHeading({
   dark?: boolean;
 }) {
   return (
-    <div className={`max-w-3xl ${center ? "mx-auto text-center" : ""}`}>
+    <div data-reveal className={`max-w-3xl ${center ? "mx-auto text-center" : ""}`}>
       {eyebrow && <p className={`eyebrow ${dark ? "eyebrow-light" : ""} ${center ? "justify-center" : ""}`}>{eyebrow}</p>}
       <h2 className={`mt-4 text-3xl leading-tight font-semibold sm:text-4xl ${dark ? "text-white" : "text-navy-900"}`}>{title}</h2>
       {intro && <p className={`mt-5 text-base leading-relaxed sm:text-lg ${dark ? "text-white/70" : "text-muted"}`}>{intro}</p>}
@@ -94,23 +126,27 @@ export function CtaBand({
   text,
   settings,
   primary = { href: "/contact#consultation", label: "Book a Consultation" },
+  image = "/images/port-cranes-night.webp",
 }: {
   title: string;
   text: string;
   settings: Settings;
   primary?: { href: string; label: string };
+  image?: string;
 }) {
   return (
-    <section className="on-dark relative overflow-hidden bg-navy-900 py-20 text-white sm:py-24">
+    <section className="on-dark relative isolate overflow-hidden bg-navy-900 py-20 text-white sm:py-28">
+      <Image src={image} alt="" aria-hidden fill quality={55} sizes="100vw" className="-z-10 object-cover" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-navy-950 via-navy-950/90 to-navy-900/60" aria-hidden />
       <Image
         src="/brand/watermark.png"
         alt=""
         aria-hidden
         width={900}
         height={683}
-        className="pointer-events-none absolute -right-24 -bottom-24 w-[34rem] opacity-[0.07]"
+        className="pointer-events-none absolute -right-24 -bottom-24 -z-10 w-[34rem] opacity-[0.08]"
       />
-      <div className="container-x relative flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
+      <div data-reveal className="container-x relative flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
         <div className="max-w-2xl">
           <span className="block h-px w-12 bg-gold-500" aria-hidden />
           <h2 className="mt-6 text-3xl leading-tight font-semibold sm:text-4xl">{title}</h2>
@@ -146,9 +182,14 @@ export function NumberedSteps({
       {steps.map((s, i) => (
         <li
           key={s.title}
-          className={`relative p-8 ${dark ? "bg-navy-800/70 ring-1 ring-white/10" : "bg-white ring-1 ring-line"}`}
+          data-reveal
+          style={delay(i)}
+          className={`group relative p-8 ${dark ? "bg-navy-800/70 ring-1 ring-white/10" : "bg-white ring-1 ring-line"}`}
         >
-          <span className="font-serif text-4xl font-semibold text-gold-500">{String(i + 1).padStart(2, "0")}</span>
+          <span className="flex items-center gap-4">
+            <span className="font-serif text-4xl font-semibold text-gold-500">{String(i + 1).padStart(2, "0")}</span>
+            <span className="h-px flex-1 origin-left scale-x-50 bg-gold-500/40 transition-transform duration-500 group-hover:scale-x-100" aria-hidden />
+          </span>
           <h3 className={`mt-4 text-xl font-semibold ${dark ? "text-white" : "text-navy-900"}`}>{s.title}</h3>
           <p className={`mt-3 text-[15px] leading-relaxed ${dark ? "text-white/65" : "text-muted"}`}>{s.text}</p>
         </li>

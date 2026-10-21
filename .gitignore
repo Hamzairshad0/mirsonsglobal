@@ -9,3 +9,5 @@ data/*.db-*
 next-env.d.ts
 scripts/ref-design.jpg
 .claude/
+scripts/photos-raw/
+mirsons-global.zip

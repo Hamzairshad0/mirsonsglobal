@@ -96,6 +96,22 @@ The local database is created automatically at `data/mirsons.db`.
 
 ---
 
+## Photos, graphics and animation
+
+- **Photos** live in `public/images/` as optimised **WebP** (1.3 MB total). Next.js `<Image>` then serves each visitor a
+  resized AVIF/WebP copy for their screen. All photos are from Unsplash (free for commercial use) — see
+  `public/images/CREDITS.md`. `npm run photos` re-downloads and re-encodes them (`scripts/build-photos.mjs`).
+- **Industry photos** can be changed in Admin → Website content → Industries → *Photo* (path to an image in `public/images`).
+- **SVG**: the world map with moving trade-route pulses (`public/world-map.svg`, animated with CSS inside the SVG), the
+  matchmaking diagram, ornaments and icons — no extra image requests.
+- **Animation** is CSS-only plus one ~0.5 kB scroll observer (`src/components/RevealObserver.tsx`): scroll reveals,
+  slow hero zoom, hover lift/zoom, gold button sheen, markets ticker. Everything switches off for visitors with
+  *reduce motion* enabled, and content is never hidden if JavaScript fails.
+- **Performance** (production build, mobile with 4× CPU slowdown and 4G): LCP 1.3–2.3 s on every page, CLS 0;
+  desktop home LCP ≈ 1.1 s.
+
+---
+
 ## Project structure
 
 ```

@@ -6,7 +6,8 @@ import { BUYER_PROCESS } from "@/lib/process";
 import { Icon } from "@/components/Icon";
 import { FormPanel } from "@/components/FormPanel";
 import { BuyerForm } from "@/components/forms/Forms";
-import { CheckList, NumberedSteps, PageHero, SectionHeading } from "@/components/ui";
+import Image from "next/image";
+import { CheckList, delay, NumberedSteps, PageHero, SectionHeading } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "For Buyers — Submit Sourcing Requirements",
@@ -28,6 +29,7 @@ export default async function BuyersPage() {
   return (
     <>
       <PageHero
+        image="/images/warehouse.webp"
         eyebrow="For buyers"
         title="Source industrial products from reliable manufacturers"
         intro="Importers, distributors, wholesalers and industrial purchasers: tell us what you need and we'll find suppliers able to deliver it."
@@ -45,9 +47,11 @@ export default async function BuyersPage() {
             intro="Finding a dependable manufacturer abroad takes time. We do the research, screening and first conversations for you."
           />
           <ul className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {HELP.map((h) => (
-              <li key={h.title} className="card p-7">
-                <Icon name={h.icon} className="h-7 w-7 text-gold-600" />
+            {HELP.map((h, i) => (
+              <li key={h.title} data-reveal style={delay(i)} className="card lift group p-7">
+                <span className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-navy-900 text-gold-400 transition-colors duration-300 group-hover:bg-gold-500 group-hover:text-navy-950">
+                  <Icon name={h.icon} className="h-6 w-6" />
+                </span>
                 <h3 className="mt-5 text-lg font-semibold text-navy-900">{h.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted">{h.text}</p>
               </li>
@@ -56,7 +60,9 @@ export default async function BuyersPage() {
         </div>
       </section>
 
-      <section className="on-dark bg-navy-900 py-20 text-white sm:py-28">
+      <section className="on-dark relative isolate overflow-hidden bg-navy-900 py-20 text-white sm:py-28">
+        <Image src="/images/containers-aerial.webp" alt="" fill quality={50} sizes="100vw" className="-z-20 object-cover opacity-25" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-navy-900 via-navy-900/85 to-navy-900" aria-hidden />
         <div className="container-x">
           <SectionHeading eyebrow="The sourcing process" title="From requirement to supplier meeting" dark />
           <div className="mt-14">
@@ -66,12 +72,24 @@ export default async function BuyersPage() {
       </section>
 
       <section className="py-20 sm:py-24">
-        <div className="container-x grid gap-12 lg:grid-cols-2 lg:gap-20">
+        <div className="container-x grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+          <div data-reveal className="photo-zoom relative order-last aspect-[4/3] overflow-hidden rounded-2xl shadow-2xl shadow-navy-900/20 lg:order-first">
+            <Image
+              src="/images/industries/packaging.webp"
+              alt="Packed cartons ready for export"
+              fill
+              quality={62}
+              sizes="(min-width: 1024px) 45vw, 100vw"
+              className="object-cover"
+            />
+          </div>
+          <div>
           <SectionHeading
             eyebrow="Before you submit"
             title="A clear requirement gets faster, better matches"
             intro="The more detail you share, the more precisely we can shortlist suppliers. Helpful information includes:"
           />
+          <div data-reveal className="mt-8">
           <CheckList
             items={[
               "Product name, grade and technical specifications",
@@ -83,6 +101,8 @@ export default async function BuyersPage() {
               "When you need the first delivery",
             ]}
           />
+          </div>
+          </div>
         </div>
       </section>
 

@@ -24,7 +24,7 @@ export type Home = {
 };
 
 export type Service = { slug: string; title: string; summary: string; points: string; icon: string };
-export type Industry = { slug: string; name: string; description: string; products: string; active: boolean };
+export type Industry = { slug: string; name: string; description: string; products: string; image: string; active: boolean };
 export type Market = { name: string; description: string };
 export type BuyerType = { title: string; description: string; icon: string };
 export type Faq = { question: string; answer: string };
@@ -120,6 +120,7 @@ export const defaults: ContentMap = {
       name: "Industrial Minerals & Raw Materials",
       description: "Bulk minerals and natural raw materials for construction, chemical and manufacturing use.",
       products: "Rock salt & industrial salt\nGypsum & limestone\nBarite & talc\nMarble & granite\nSilica sand",
+      image: "/images/industries/industrial-minerals.webp",
       active: true,
     },
     {
@@ -127,6 +128,7 @@ export const defaults: ContentMap = {
       name: "Metals & Steel Products",
       description: "Ferrous and non-ferrous metals, semi-finished and finished steel products.",
       products: "Steel pipes & tubes\nRebar & structural steel\nAluminium & copper products\nMetal scrap\nFasteners & fittings",
+      image: "/images/industries/metals-steel.webp",
       active: true,
     },
     {
@@ -134,6 +136,7 @@ export const defaults: ContentMap = {
       name: "Chemicals & Polymers",
       description: "Industrial chemicals, plastics and polymer raw materials for processors and converters.",
       products: "PVC, PET & PP resins\nCaustic soda & soda ash\nIndustrial solvents\nMasterbatches & additives",
+      image: "/images/industries/chemicals-polymers.webp",
       active: true,
     },
     {
@@ -141,6 +144,7 @@ export const defaults: ContentMap = {
       name: "Construction & Building Materials",
       description: "Materials and products for contractors, developers and building-material distributors.",
       products: "Cement & clinker\nCeramic & porcelain tiles\nSanitary ware\nGlass & aluminium profiles",
+      image: "/images/industries/construction-materials.webp",
       active: true,
     },
     {
@@ -148,6 +152,7 @@ export const defaults: ContentMap = {
       name: "Textiles & Technical Fabrics",
       description: "Yarns, fabrics and made-ups for garment makers, wholesalers and industrial users.",
       products: "Cotton & blended yarns\nGrey & finished fabrics\nHome textiles & towels\nWorkwear & technical fabrics",
+      image: "/images/industries/textiles.webp",
       active: true,
     },
     {
@@ -155,6 +160,7 @@ export const defaults: ContentMap = {
       name: "Agri-Commodities & Food Ingredients",
       description: "Agricultural commodities and ingredients for importers, processors and food manufacturers.",
       products: "Rice & pulses\nSesame & oilseeds\nSpices & dried herbs\nHimalayan pink salt",
+      image: "/images/industries/agri-commodities.webp",
       active: true,
     },
     {
@@ -162,6 +168,7 @@ export const defaults: ContentMap = {
       name: "Packaging Materials",
       description: "Industrial and consumer packaging for manufacturers, exporters and distributors.",
       products: "Corrugated cartons\nWoven polypropylene bags\nFlexible packaging films\nPaper & board",
+      image: "/images/industries/packaging.webp",
       active: true,
     },
     {
@@ -169,6 +176,7 @@ export const defaults: ContentMap = {
       name: "Electrical, Solar & Industrial Equipment",
       description: "Equipment and components for EPC contractors, OEMs and industrial projects.",
       products: "Cables & wires\nSolar panels & mounting structures\nPumps & motors\nSwitchgear & components",
+      image: "/images/industries/electrical-equipment.webp",
       active: true,
     },
   ],
@@ -313,6 +321,12 @@ export const sections: SectionSpec[] = [
       { name: "slug", label: "Anchor (url-friendly)", type: "text" },
       { name: "description", label: "Description", type: "textarea" },
       { name: "products", label: "Example products", type: "lines", help: "One product per line" },
+      {
+        name: "image",
+        label: "Photo",
+        type: "text",
+        help: "Path of an image in the website, e.g. /images/industries/textiles.webp — leave empty for the default photo",
+      },
       { name: "active", label: "Show on website", type: "boolean" },
     ],
   },
@@ -365,6 +379,14 @@ export const sections: SectionSpec[] = [
     ],
   },
 ];
+
+const DEFAULT_INDUSTRY_IMAGE = "/images/containers-aerial.webp";
+
+// Saved content may predate the image field, so fall back to the default photo for that industry.
+export function industryImage(ind: Pick<Industry, "slug" | "image">): string {
+  if (ind.image && ind.image.startsWith("/")) return ind.image;
+  return defaults.industries.find((d) => d.slug === ind.slug)?.image ?? DEFAULT_INDUSTRY_IMAGE;
+}
 
 export function lines(value: string): string[] {
   return value

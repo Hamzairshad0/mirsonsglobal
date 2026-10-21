@@ -39,7 +39,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const plausible = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
   const ga = process.env.NEXT_PUBLIC_GA_ID;
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
+    <html lang="en" className={`${inter.variable} ${playfair.variable}`} suppressHydrationWarning>
+      <head>
+        {/* Enables scroll-reveal styles only when JavaScript runs */}
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+      </head>
       <body>
         {children}
         {plausible && (

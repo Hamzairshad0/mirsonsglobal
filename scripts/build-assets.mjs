@@ -111,17 +111,29 @@ await icon(180, "src/app/apple-icon.png");
     ["karachi", "singapore"], ["istanbul", "almaty"], ["london", "houston"], ["dubai", "nairobi"],
     ["rotterdam", "saopaulo"], ["riyadh", "istanbul"], ["karachi", "dubai"],
   ];
-  const arc = ([a, b]) => {
+  const arcPath = ([a, b]) => {
     const p = pts[a], q = pts[b];
     const mx = (p.x + q.x) / 2, my = (p.y + q.y) / 2;
     const d = Math.hypot(q.x - p.x, q.y - p.y);
-    return `<path d="M${p.x.toFixed(2)},${p.y.toFixed(2)} Q${mx.toFixed(2)},${(my - d * 0.28).toFixed(2)} ${q.x.toFixed(2)},${q.y.toFixed(2)}" />`;
+    return `M${p.x.toFixed(1)},${p.y.toFixed(1)} Q${mx.toFixed(1)},${(my - d * 0.28).toFixed(1)} ${q.x.toFixed(1)},${q.y.toFixed(1)}`;
   };
-  const dots = Object.values(pts)
-    .map((p) => `<circle cx="${p.x.toFixed(2)}" cy="${p.y.toFixed(2)}" r="0.9" /><circle cx="${p.x.toFixed(2)}" cy="${p.y.toFixed(2)}" r="2.2" fill-opacity="0.18" />`)
+  const base = routes.map((r) => `<path d="${arcPath(r)}"/>`).join("");
+  // A short bright segment travels along each route; staggered so they never all move together.
+  const pulses = routes
+    .map((r, i) => `<path pathLength="100" style="animation-delay:-${(i * 1.7).toFixed(1)}s" d="${arcPath(r)}"/>`)
     .join("");
-  const overlay = `<g fill="none" stroke="#c9a45c" stroke-width="0.28" stroke-opacity="0.55" stroke-linecap="round">${routes.map(arc).join("")}</g><g fill="#e3c27d">${dots}</g></svg>`;
-  writeFileSync("public/world-map.svg", svgDots.replace(/<\/svg>\s*$/, overlay));
+  const dots = Object.values(pts)
+    .map(
+      (p, i) =>
+        `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="0.9"/><circle class="h" style="animation-delay:-${(i * 0.6).toFixed(1)}s" cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="2.4" fill-opacity="0.25"/>`
+    )
+    .join("");
+  // CSS animations run even when the SVG is used as an <img>, so this costs no JavaScript.
+  const style = `<style>.r path{stroke-dasharray:7 93;stroke-dashoffset:100;animation:r 9s linear infinite}@keyframes r{to{stroke-dashoffset:0}}.h{transform-box:fill-box;transform-origin:center;animation:h 3.6s ease-out infinite}@keyframes h{0%{transform:scale(.4);opacity:.9}100%{transform:scale(1.6);opacity:0}}@media (prefers-reduced-motion:reduce){.r path,.h{animation:none}.r{display:none}}</style>`;
+  const overlay = `${style}<g fill="none" stroke="#c9a45c" stroke-width="0.28" stroke-opacity="0.4" stroke-linecap="round">${base}</g><g class="r" fill="none" stroke="#f0d79a" stroke-width="0.5" stroke-linecap="round">${pulses}</g><g fill="#e3c27d">${dots}</g></svg>`;
+  // Round the dot coordinates to keep the file small.
+  const compact = svgDots.replace(/(\d+\.\d)\d+/g, "$1").replace(/<\/svg>\s*$/, overlay);
+  writeFileSync("public/world-map.svg", compact);
 }
 
 console.log("Brand assets written.");

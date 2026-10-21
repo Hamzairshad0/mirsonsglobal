@@ -1,6 +1,7 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { RevealObserver } from "@/components/RevealObserver";
 import { getContent } from "@/lib/content";
 import { siteUrl } from "@/lib/site";
 
@@ -26,6 +27,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       <main id="main">{children}</main>
       <Footer settings={settings} />
       <WhatsAppButton settings={settings} />
+      <RevealObserver />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }} />
     </>
   );

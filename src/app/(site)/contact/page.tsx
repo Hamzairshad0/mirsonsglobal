@@ -32,6 +32,7 @@ export default async function ContactPage() {
   return (
     <>
       <PageHero
+        image="/images/video-call.webp"
         eyebrow="Contact us"
         title="Let's discuss your requirements"
         intro="Request a consultation, email our team or message us on WhatsApp. We respond to every genuine business inquiry."

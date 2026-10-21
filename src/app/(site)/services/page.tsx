@@ -5,7 +5,8 @@ import { getContent } from "@/lib/content";
 import { lines } from "@/lib/content-schema";
 import { WHAT_YOU_RECEIVE } from "@/lib/process";
 import { Icon } from "@/components/Icon";
-import { CheckList, CtaBand, PageHero, SectionHeading } from "@/components/ui";
+import Image from "next/image";
+import { CheckList, CtaBand, delay, PageHero, SectionHeading } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "Our Services",
@@ -38,6 +39,7 @@ export default async function ServicesPage() {
   return (
     <>
       <PageHero
+        image="/images/factory-interior.webp"
         eyebrow="Our services"
         title="B2B growth services for manufacturers and buyers"
         intro="We combine market research, targeted outreach and professional follow-up to create qualified opportunities — and arrange the meetings that turn them into business."
@@ -53,10 +55,12 @@ export default async function ServicesPage() {
             <article
               key={s.slug}
               id={s.slug}
-              className="card grid gap-8 p-8 sm:p-10 lg:grid-cols-[auto_1.2fr_1fr] lg:items-start lg:gap-12"
+              data-reveal
+              className="card lift group relative grid gap-8 overflow-hidden p-8 sm:p-10 lg:grid-cols-[auto_1.2fr_1fr] lg:items-start lg:gap-12"
             >
+              <span className="absolute inset-y-0 left-0 w-1 origin-top scale-y-0 bg-gold-500 transition-transform duration-500 group-hover:scale-y-100" aria-hidden />
               <div className="flex items-center gap-4 lg:flex-col lg:items-start">
-                <span className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-navy-900 text-gold-400">
+                <span className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-navy-900 text-gold-400 transition-colors duration-300 group-hover:bg-gold-500 group-hover:text-navy-950">
                   <Icon name={s.icon} className="h-7 w-7" />
                 </span>
                 <span className="font-serif text-sm text-gold-600">{String(i + 1).padStart(2, "0")}</span>
@@ -71,7 +75,7 @@ export default async function ServicesPage() {
         </div>
       </section>
 
-      <section className="bg-sand py-20 sm:py-28">
+      <section className="bg-grid bg-sand py-20 sm:py-28">
         <div className="container-x">
           <SectionHeading
             eyebrow="Ways to work with us"
@@ -80,10 +84,12 @@ export default async function ServicesPage() {
             center
           />
           <div className="mt-14 grid gap-6 lg:grid-cols-3">
-            {ENGAGEMENTS.map((e) => (
+            {ENGAGEMENTS.map((e, i) => (
               <div
                 key={e.name}
-                className={`flex flex-col rounded-2xl p-8 sm:p-10 ${
+                data-reveal
+                style={delay(i, 120)}
+                className={`lift flex flex-col rounded-2xl p-8 sm:p-10 ${
                   e.featured ? "bg-navy-900 text-white ring-1 ring-gold-500/40" : "border border-line bg-white"
                 }`}
               >
@@ -104,13 +110,27 @@ export default async function ServicesPage() {
       </section>
 
       <section className="py-20 sm:py-28">
-        <div className="container-x grid gap-12 lg:grid-cols-2 lg:gap-20">
-          <SectionHeading
-            eyebrow="What you receive"
-            title="A complete outbound sales function — without hiring one"
-            intro="Research, outreach, follow-up and qualification handled by one accountable team, with clear reporting at every step."
-          />
-          <CheckList items={WHAT_YOU_RECEIVE} cols={2} />
+        <div className="container-x grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+          <div>
+            <SectionHeading
+              eyebrow="What you receive"
+              title="A complete outbound sales function — without hiring one"
+              intro="Research, outreach, follow-up and qualification handled by one accountable team, with clear reporting at every step."
+            />
+            <div data-reveal className="mt-10">
+              <CheckList items={WHAT_YOU_RECEIVE} cols={2} />
+            </div>
+          </div>
+          <div data-reveal className="photo-zoom relative aspect-[4/3] overflow-hidden rounded-2xl shadow-2xl shadow-navy-900/20">
+            <Image
+              src="/images/business-meeting.webp"
+              alt="Business development team meeting with international partners"
+              fill
+              quality={62}
+              sizes="(min-width: 1024px) 45vw, 100vw"
+              className="object-cover"
+            />
+          </div>
         </div>
       </section>
 
