@@ -1,16 +1,24 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { Inter, Playfair_Display } from "next/font/google";
+import localFont from "next/font/local";
 import { getContent } from "@/lib/content";
 import { siteUrl } from "@/lib/site";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-playfair",
-  weight: ["500", "600", "700"],
+// Fonts are bundled (src/app/fonts) rather than fetched from Google at build time,
+// so a Google Fonts outage can never break a deploy.
+const inter = localFont({
+  src: "./fonts/inter-latin-wght-normal.woff2",
+  variable: "--font-inter",
+  weight: "100 900",
   display: "swap",
+});
+const playfair = localFont({
+  src: "./fonts/playfair-display-latin-wght-normal.woff2",
+  variable: "--font-playfair",
+  weight: "400 900",
+  display: "swap",
+  adjustFontFallback: "Times New Roman",
 });
 
 export async function generateMetadata(): Promise<Metadata> {
