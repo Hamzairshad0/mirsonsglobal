@@ -63,6 +63,8 @@ const WORDMARK = { left: 140, top: 715, width: 975, height: 250 };
 await blackToAlpha(SRC_GOLD, MARK, `${OUT}/logo-mark.png`, 360);
 await blackToAlpha(SRC_GOLD, FULL, `${OUT}/logo-full.png`, 720);
 await blackToAlpha(SRC_GOLD, WORDMARK, `${OUT}/logo-wordmark.png`, 600);
+// The client's logo exactly as supplied, minus only the small tagline line (unreadable at header size).
+await blackToAlpha(SRC_GOLD, { left: 140, top: 195, width: 975, height: 790 }, `${OUT}/logo-header.png`, 480);
 await whiteToAlpha(SRC_WATERMARK, { left: 200, top: 310, width: 870, height: 660 }, `${OUT}/watermark.png`, 900);
 
 // Favicons / app icons: mark centred on navy

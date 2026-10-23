@@ -36,8 +36,12 @@ export function Header() {
         solid ? "border-b border-white/10 bg-navy-950/95 backdrop-blur" : "bg-transparent"
       }`}
     >
-      <div className="container-x flex h-20 items-center justify-between gap-6">
-        <Logo />
+      <div
+        className={`container-x flex items-center justify-between gap-6 transition-[height] duration-300 ${
+          solid ? "h-20" : "h-20 lg:h-28"
+        }`}
+      >
+        <Logo compact={solid} />
 
         <nav aria-label="Main" className="hidden xl:block">
           <ul className="flex items-center gap-7">

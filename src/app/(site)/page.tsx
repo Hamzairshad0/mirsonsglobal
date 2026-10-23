@@ -52,7 +52,7 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="on-dark relative isolate flex min-h-[92svh] items-center overflow-hidden bg-navy-950 pt-28 pb-20 text-white">
+      <section className="on-dark relative isolate flex min-h-[92svh] items-center overflow-hidden bg-navy-950 pt-36 pb-20 text-white">
         <Image
           src="/images/hero-port.webp"
           alt=""
@@ -379,15 +379,18 @@ function AudienceCard({
       style={delay(index, 120)}
       className={`photo-zoom lift group relative flex flex-col overflow-hidden rounded-2xl ${dark ? "bg-navy-900 text-white" : "border border-line bg-white"}`}
     >
-      <div className="relative aspect-[16/8] overflow-hidden">
-        <Image src={image} alt="" fill quality={60} sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" />
+      <div className="relative">
+        <div className="relative aspect-[16/8] overflow-hidden">
+          <Image src={image} alt="" fill quality={60} sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" />
+          <span
+            className={`absolute inset-0 bg-gradient-to-t ${dark ? "from-navy-900 via-navy-900/20" : "from-white via-white/0"} to-transparent`}
+            aria-hidden
+          />
+        </div>
+        {/* Outside the photo's overflow-hidden box so the badge can overlap the text panel without being clipped */}
         <span
-          className={`absolute inset-0 bg-gradient-to-t ${dark ? "from-navy-900 via-navy-900/20" : "from-white via-white/0"} to-transparent`}
-          aria-hidden
-        />
-        <span
-          className={`absolute bottom-0 left-8 inline-flex h-14 w-14 translate-y-1/2 items-center justify-center rounded-xl shadow-lg sm:left-10 ${
-            dark ? "bg-gold-500 text-navy-950" : "bg-navy-900 text-gold-400"
+          className={`absolute bottom-0 left-8 z-10 inline-flex h-14 w-14 translate-y-1/2 items-center justify-center rounded-xl shadow-lg sm:left-10 ${
+            dark ? "bg-gold-500 text-navy-950 shadow-black/30" : "bg-navy-900 text-gold-400"
           }`}
         >
           {icon}

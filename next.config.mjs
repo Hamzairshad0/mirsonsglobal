@@ -2,7 +2,8 @@
 const nextConfig = {
   poweredByHeader: false,
   serverExternalPackages: ["@libsql/client", "libsql"],
-  images: { formats: ["image/avif", "image/webp"] },
+  // qualities lists every quality value used by <Image> (required from Next.js 16)
+  images: { formats: ["image/avif", "image/webp"], qualities: [45, 50, 55, 60, 62, 75] },
   async headers() {
     return [
       {
