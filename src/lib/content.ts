@@ -1,6 +1,6 @@
 import "server-only";
 import { unstable_cache } from "next/cache";
-import { db } from "./db";
+import { repo } from "./leads";
 import { defaults, sections, type ContentKey, type ContentMap } from "./content-schema";
 
 export const CONTENT_TAG = "content";
@@ -8,9 +8,7 @@ export const CONTENT_TAG = "content";
 const loadAll = unstable_cache(
   async (): Promise<Partial<Record<ContentKey, string>>> => {
     try {
-      const client = await db();
-      const rs = await client.execute("SELECT key, value FROM content");
-      return Object.fromEntries(rs.rows.map((r) => [String(r.key), String(r.value)]));
+      return await repo.loadContent();
     } catch (err) {
       console.error("[content] falling back to defaults:", err);
       return {};
@@ -67,21 +65,13 @@ export function sanitizeContent(key: ContentKey, input: unknown): unknown {
 }
 
 export async function saveContent(key: ContentKey, value: unknown) {
-  const client = await db();
-  await client.execute({
-    sql: `INSERT INTO content (key, value, updated_at) VALUES (?, ?, datetime('now'))
-          ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at`,
-    args: [key, JSON.stringify(sanitizeContent(key, value))],
-  });
+  await repo.saveContent(key, JSON.stringify(sanitizeContent(key, value)));
 }
 
 export async function resetContent(key: ContentKey) {
-  const client = await db();
-  await client.execute({ sql: "DELETE FROM content WHERE key = ?", args: [key] });
+  await repo.resetContent(key);
 }
 
 export async function getContentUpdatedAt(): Promise<Record<string, string>> {
-  const client = await db();
-  const rs = await client.execute("SELECT key, updated_at FROM content");
-  return Object.fromEntries(rs.rows.map((r) => [String(r.key), String(r.updated_at)]));
+  return repo.contentUpdatedAt();
 }

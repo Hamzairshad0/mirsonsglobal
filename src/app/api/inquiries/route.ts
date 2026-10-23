@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
-import { db } from "@/lib/db";
+import { repo } from "@/lib/leads";
 import { rateLimit } from "@/lib/rate-limit";
 import { sendInquiryEmails } from "@/lib/email";
 import { getContent } from "@/lib/content";
@@ -45,26 +45,18 @@ export async function POST(req: Request) {
 
   const data = parsed.data as Record<string, unknown>;
   try {
-    const client = await db();
-    const rs = await client.execute({
-      sql: `INSERT INTO inquiries (type, name, email, phone, company, country, summary, data, source_page, user_agent)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id`,
-      args: [
-        type,
-        String(data.name),
-        String(data.email),
-        String(data.phone ?? ""),
-        String(data.company ?? ""),
-        String(data.country ?? ""),
-        summarize(type, data).slice(0, 300),
-        JSON.stringify(data),
-        String(body.page ?? "").slice(0, 200),
-        (h.get("user-agent") ?? "").slice(0, 300),
-      ],
+    const { id, ref } = await repo.createInquiry({
+      type,
+      name: String(data.name),
+      email: String(data.email),
+      phone: String(data.phone ?? ""),
+      company: String(data.company ?? ""),
+      country: String(data.country ?? ""),
+      summary: summarize(type, data).slice(0, 300),
+      data,
+      sourcePage: String(body.page ?? "").slice(0, 200),
+      userAgent: (h.get("user-agent") ?? "").slice(0, 300),
     });
-    const id = Number(rs.rows[0].id);
-    const ref = `MG-${new Date().getFullYear().toString().slice(2)}${String(id).padStart(5, "0")}`;
-    await client.execute({ sql: "UPDATE inquiries SET ref = ? WHERE id = ?", args: [ref, id] });
 
     // The record is already saved, so an email failure never loses the inquiry.
     const settings = await getContent("settings");
@@ -76,7 +68,7 @@ export async function POST(req: Request) {
       companyName: settings.companyName,
       replyEmail: settings.email,
     });
-    await client.execute({ sql: "UPDATE inquiries SET email_status = ? WHERE id = ?", args: [emailStatus, id] });
+    await repo.setEmailStatus(id, emailStatus);
 
     return NextResponse.json({ ok: true, ref });
   } catch (err) {

@@ -1,66 +1,46 @@
 import "server-only";
-import { createClient, type Client } from "@libsql/client";
+import { mkdirSync } from "node:fs";
+import { dirname } from "node:path";
+import { createClient } from "@libsql/client";
+import { neon } from "@neondatabase/serverless";
+import { postgresDb, schema, sqliteDb, type Db } from "./sql";
 
-let client: Client | null = null;
+let instance: Db | null = null;
 let ready: Promise<void> | null = null;
 
-const SCHEMA = [
-  `CREATE TABLE IF NOT EXISTS inquiries (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    ref TEXT UNIQUE,
-    type TEXT NOT NULL,
-    status TEXT NOT NULL DEFAULT 'new',
-    name TEXT NOT NULL,
-    email TEXT NOT NULL,
-    phone TEXT,
-    company TEXT,
-    country TEXT,
-    summary TEXT,
-    data TEXT NOT NULL,
-    follow_up_date TEXT,
-    email_status TEXT,
-    source_page TEXT,
-    user_agent TEXT,
-    created_at TEXT NOT NULL DEFAULT (datetime('now')),
-    updated_at TEXT NOT NULL DEFAULT (datetime('now'))
-  )`,
-  `CREATE INDEX IF NOT EXISTS idx_inquiries_created ON inquiries(created_at)`,
-  `CREATE INDEX IF NOT EXISTS idx_inquiries_status ON inquiries(status)`,
-  `CREATE TABLE IF NOT EXISTS inquiry_notes (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    inquiry_id INTEGER NOT NULL REFERENCES inquiries(id) ON DELETE CASCADE,
-    body TEXT NOT NULL,
-    created_at TEXT NOT NULL DEFAULT (datetime('now'))
-  )`,
-  `CREATE TABLE IF NOT EXISTS content (
-    key TEXT PRIMARY KEY,
-    value TEXT NOT NULL,
-    updated_at TEXT NOT NULL DEFAULT (datetime('now'))
-  )`,
-];
-
-// The Vercel ↔ Turso integration sets TURSO_DATABASE_URL / TURSO_AUTH_TOKEN, sometimes with a
-// custom prefix (e.g. STORAGE_TURSO_DATABASE_URL), so accept any prefix.
+// Vercel integrations may add a custom prefix (e.g. STORAGE_TURSO_DATABASE_URL), so accept any prefix.
 function envEndingWith(suffix: string) {
   const key = Object.keys(process.env).find((k) => k === suffix || k.endsWith(`_${suffix}`));
   return key ? process.env[key] : undefined;
 }
 
-export async function db(): Promise<Client> {
-  if (!client) {
-    const url = process.env.DATABASE_URL || envEndingWith("TURSO_DATABASE_URL") || "file:data/mirsons.db";
-    const authToken = process.env.DATABASE_AUTH_TOKEN || envEndingWith("TURSO_AUTH_TOKEN") || undefined;
-    if (url.startsWith("file:")) {
-      const { mkdirSync } = await import("node:fs");
-      const { dirname } = await import("node:path");
-      mkdirSync(dirname(url.slice(5)), { recursive: true });
-    }
-    client = createClient({ url, authToken });
-  }
+/**
+ * Picks the database from the environment:
+ * - Postgres (Neon via Vercel Storage): DATABASE_URL / POSTGRES_URL starting with postgres://
+ * - Turso: DATABASE_URL libsql://… or TURSO_DATABASE_URL (+ token)
+ * - Local development: SQLite file data/mirsons.db
+ */
+function connect(): Db {
+  const url =
+    process.env.DATABASE_URL ||
+    envEndingWith("POSTGRES_URL") ||
+    envEndingWith("TURSO_DATABASE_URL") ||
+    "file:data/mirsons.db";
+
+  if (/^postgres(ql)?:\/\//.test(url)) return postgresDb(neon(url));
+
+  if (url.startsWith("file:")) mkdirSync(dirname(url.slice(5)), { recursive: true });
+  const authToken = process.env.DATABASE_AUTH_TOKEN || envEndingWith("TURSO_AUTH_TOKEN") || undefined;
+  return sqliteDb(createClient({ url, authToken }) as never);
+}
+
+export async function db(): Promise<Db> {
+  if (!instance) instance = connect();
   if (!ready) {
-    ready = client.batch(SCHEMA, "write").then(() => undefined);
+    const d = instance;
+    ready = d.batch(schema(d.dialect).map((sql) => ({ sql })));
     ready.catch(() => (ready = null));
   }
   await ready;
-  return client;
+  return instance;
 }
