@@ -39,11 +39,17 @@ const SCHEMA = [
   )`,
 ];
 
+// The Vercel ↔ Turso integration sets TURSO_DATABASE_URL / TURSO_AUTH_TOKEN, sometimes with a
+// custom prefix (e.g. STORAGE_TURSO_DATABASE_URL), so accept any prefix.
+function envEndingWith(suffix: string) {
+  const key = Object.keys(process.env).find((k) => k === suffix || k.endsWith(`_${suffix}`));
+  return key ? process.env[key] : undefined;
+}
+
 export async function db(): Promise<Client> {
   if (!client) {
-    // TURSO_* names are what the Vercel ↔ Turso integration sets automatically.
-    const url = process.env.DATABASE_URL || process.env.TURSO_DATABASE_URL || "file:data/mirsons.db";
-    const authToken = process.env.DATABASE_AUTH_TOKEN || process.env.TURSO_AUTH_TOKEN || undefined;
+    const url = process.env.DATABASE_URL || envEndingWith("TURSO_DATABASE_URL") || "file:data/mirsons.db";
+    const authToken = process.env.DATABASE_AUTH_TOKEN || envEndingWith("TURSO_AUTH_TOKEN") || undefined;
     if (url.startsWith("file:")) {
       const { mkdirSync } = await import("node:fs");
       const { dirname } = await import("node:path");
