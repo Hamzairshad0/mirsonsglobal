@@ -8,7 +8,9 @@ import { saveContentAction } from "@/app/admin/actions";
 type Item = Record<string, string | boolean>;
 
 function blank(fields: FieldSpec[]): Item {
-  return Object.fromEntries(fields.map((f) => [f.name, f.type === "boolean" ? true : f.type === "icon" ? "globe" : ""]));
+  return Object.fromEntries(
+    fields.map((f) => [f.name, f.type === "boolean" ? true : f.type === "icon" ? "globe" : f.type === "select" ? (f.options?.[0] ?? "") : ""])
+  );
 }
 
 function FieldInput({ field, value, onChange, id }: { field: FieldSpec; value: string | boolean; onChange: (v: string | boolean) => void; id: string }) {
@@ -25,7 +27,16 @@ function FieldInput({ field, value, onChange, id }: { field: FieldSpec; value: s
       <label htmlFor={id} className="field-label">
         {field.label}
       </label>
-      {field.type === "icon" ? (
+      {field.type === "select" ? (
+        <select id={id} value={String(value ?? "")} onChange={(e) => onChange(e.target.value)} className="field-input">
+          {!field.options?.includes(String(value)) && <option value={String(value ?? "")}>{String(value || "Select…")}</option>}
+          {field.options?.map((o) => (
+            <option key={o} value={o}>
+              {o}
+            </option>
+          ))}
+        </select>
+      ) : field.type === "icon" ? (
         <select id={id} value={String(value)} onChange={(e) => onChange(e.target.value)} className="field-input">
           {ICONS.map((i) => (
             <option key={i} value={i}>

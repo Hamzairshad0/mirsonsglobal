@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { getActiveIndustries, getContent } from "@/lib/content";
-import { MANUFACTURER_PROCESS, WHAT_YOU_RECEIVE } from "@/lib/process";
+import { getContent, getProductOptions } from "@/lib/content";
+import { OfferSection } from "@/components/Catalog";
+import { MANUFACTURER_PROCESS } from "@/lib/process";
 import { Icon } from "@/components/Icon";
 import { FormPanel } from "@/components/FormPanel";
 import { ManufacturerForm } from "@/components/forms/Forms";
 import Image from "next/image";
-import { CheckList, delay, NumberedSteps, PageHero, SectionHeading } from "@/components/ui";
+import { delay, NumberedSteps, PageHero, SectionHeading } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "For Manufacturers & Suppliers",
@@ -32,10 +33,10 @@ const PAINS = [
 ];
 
 export default async function ManufacturersPage() {
-  const [settings, industries, markets, buyerTypes] = await Promise.all([
+  const [settings, products, offer, buyerTypes] = await Promise.all([
     getContent("settings"),
-    getActiveIndustries(),
-    getContent("markets"),
+    getProductOptions(),
+    getContent("offer"),
     getContent("buyerTypes"),
   ]);
 
@@ -111,31 +112,9 @@ export default async function ManufacturersPage() {
         </div>
       </section>
 
-      <section className="border-t border-line bg-white py-20 sm:py-28">
-        <div className="container-x grid gap-14 lg:grid-cols-2 lg:gap-20">
-          <div>
-            <SectionHeading
-              eyebrow="What you receive"
-              title="Everything required to open a new market"
-              intro="We don't sell generic “digital marketing”. We build targeted B2B sales pipelines."
-            />
-            <div data-reveal className="mt-10">
-              <CheckList items={WHAT_YOU_RECEIVE} cols={2} />
-            </div>
-          </div>
-          <div data-reveal>
-            <h3 className="text-xl font-semibold text-navy-900">Markets we target</h3>
-            <ul className="mt-6 divide-y divide-line border-y border-line">
-              {markets.map((m) => (
-                <li key={m.name} className="group flex flex-col gap-1 py-4 transition-colors hover:bg-ivory sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
-                  <span className="font-serif text-lg font-semibold text-navy-900 transition-transform duration-300 group-hover:translate-x-1">{m.name}</span>
-                  <span className="text-sm text-muted sm:text-right">{m.description}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
+      <div className="border-t border-line bg-white">
+        <OfferSection offer={offer} />
+      </div>
 
       <FormPanel
         id="inquiry"
@@ -160,7 +139,7 @@ export default async function ManufacturersPage() {
           </div>
         }
       >
-        <ManufacturerForm categories={industries.map((i) => i.name)} />
+        <ManufacturerForm products={products} />
       </FormPanel>
     </>
   );

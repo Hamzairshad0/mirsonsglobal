@@ -106,6 +106,14 @@ export default async function ServicesPage() {
               </div>
             ))}
           </div>
+          <div data-reveal className="mt-10 flex flex-wrap justify-center gap-4">
+            <Link href="/pilot" className="btn-navy">
+              Pilot Programme details <ArrowRight className="h-4 w-4" aria-hidden />
+            </Link>
+            <Link href="/sample-report" className="btn-outline">
+              View a sample report
+            </Link>
+          </div>
         </div>
       </section>
 

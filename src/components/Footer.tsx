@@ -6,11 +6,20 @@ import { whatsappLink } from "@/lib/site";
 
 const COLUMNS = [
   {
+    title: "Products",
+    links: [
+      { href: "/industries/stainless-steel", label: "Stainless Steel" },
+      { href: "/industries/copper", label: "Copper" },
+      { href: "/industries#products", label: "All priority products" },
+      { href: "/contact#consultation", label: "Book a Consultation" },
+    ],
+  },
+  {
     title: "Company",
     links: [
       { href: "/about", label: "About Us" },
       { href: "/how-it-works", label: "How It Works" },
-      { href: "/industries", label: "Industries We Serve" },
+      { href: "/industries", label: "Industries & Products" },
       { href: "/contact", label: "Contact" },
     ],
   },
@@ -20,7 +29,8 @@ const COLUMNS = [
       { href: "/services", label: "Our Services" },
       { href: "/manufacturers", label: "For Manufacturers & Suppliers" },
       { href: "/buyers", label: "For Buyers" },
-      { href: "/contact#consultation", label: "Book a Consultation" },
+      { href: "/pilot", label: "Pilot Programme" },
+      { href: "/sample-report", label: "Sample Report" },
     ],
   },
 ];
@@ -28,7 +38,7 @@ const COLUMNS = [
 export function Footer({ settings }: { settings: Settings }) {
   return (
     <footer className="on-dark relative overflow-hidden bg-navy-950 text-white/70">
-      <div className="container-x grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.3fr] lg:py-20">
+      <div className="container-x grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr_1.3fr] lg:py-20">
         <div>
           <Link href="/" aria-label={`${settings.companyName} — home`} className="inline-block">
             <Image src="/brand/logo-full.png" alt={settings.companyName} width={720} height={628} className="h-auto w-44" />

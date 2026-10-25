@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ExternalLink, FileText, LayoutDashboard, LogOut, Users } from "lucide-react";
+import { Columns3, ExternalLink, FileText, LayoutDashboard, LogOut, Users } from "lucide-react";
 import { requireAdmin } from "@/lib/auth";
 import { logoutAction } from "../actions";
 
@@ -14,6 +14,7 @@ export const dynamic = "force-dynamic";
 const NAV = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard },
   { href: "/admin/leads", label: "Leads", icon: Users },
+  { href: "/admin/pipeline", label: "Pipeline", icon: Columns3 },
   { href: "/admin/content", label: "Website content", icon: FileText },
 ];
 

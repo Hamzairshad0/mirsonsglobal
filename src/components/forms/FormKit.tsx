@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { createContext, useContext, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { AlertCircle, ArrowRight, Loader2 } from "lucide-react";
 import type { InquiryType } from "@/lib/inquiry";
 
@@ -42,6 +42,16 @@ export function InquiryForm({
 }) {
   const router = useRouter();
   const startedAt = useRef(Date.now());
+  const formRef = useRef<HTMLFormElement>(null);
+
+  // Pre-select the product when arriving from a product page (?product=Copper%20Busbars)
+  useEffect(() => {
+    const wanted = new URLSearchParams(window.location.search).get("product");
+    const select = formRef.current?.elements.namedItem("category");
+    if (!wanted || !(select instanceof HTMLSelectElement)) return;
+    const match = [...select.options].find((o) => o.value.toLowerCase() === wanted.toLowerCase());
+    if (match) select.value = match.value;
+  }, []);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState("");
   const [pending, setPending] = useState(false);
@@ -78,7 +88,7 @@ export function InquiryForm({
 
   return (
     <ErrorsContext.Provider value={errors}>
-      <form onSubmit={onSubmit} noValidate={false} className="space-y-6">
+      <form ref={formRef} onSubmit={onSubmit} noValidate={false} className="space-y-6">
         {/* Honeypot: hidden from people, often filled by bots */}
         <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden>
           <label>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { getActiveIndustries, getContent } from "@/lib/content";
+import { getContent, getProductOptions } from "@/lib/content";
 import { BUYER_PROCESS } from "@/lib/process";
 import { Icon } from "@/components/Icon";
 import { FormPanel } from "@/components/FormPanel";
@@ -24,7 +24,7 @@ const HELP = [
 ];
 
 export default async function BuyersPage() {
-  const [settings, industries] = await Promise.all([getContent("settings"), getActiveIndustries()]);
+  const [settings, products] = await Promise.all([getContent("settings"), getProductOptions()]);
 
   return (
     <>
@@ -75,8 +75,8 @@ export default async function BuyersPage() {
         <div className="container-x grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
           <div data-reveal className="photo-zoom relative order-last aspect-[4/3] overflow-hidden rounded-2xl shadow-2xl shadow-navy-900/20 lg:order-first">
             <Image
-              src="/images/industries/packaging.webp"
-              alt="Packed cartons ready for export"
+              src="/images/products/ss-pipes-tubes.webp"
+              alt="Bundle of stainless steel tubes"
               fill
               quality={62}
               sizes="(min-width: 1024px) 45vw, 100vw"
@@ -113,7 +113,7 @@ export default async function BuyersPage() {
         intro="Submitting a requirement is free and without obligation. We'll confirm the details and explain how we can help before any work begins."
         settings={settings}
       >
-        <BuyerForm categories={industries.map((i) => i.name)} />
+        <BuyerForm products={products} />
       </FormPanel>
     </>
   );

@@ -5,4 +5,5 @@ import { makeRepo } from "./repo";
 export type { Lead, LeadFilters } from "./repo";
 
 export const repo = makeRepo(db);
-export const { listLeads, getLead, updateLead, addNote, deleteNote, deleteLead, leadStats } = repo;
+export const { listLeads, getLead, updateLead, setStatus, findMatches, dailyDigest, addNote, deleteNote, deleteLead, leadStats } = repo;
+export type { Match } from "./repo";

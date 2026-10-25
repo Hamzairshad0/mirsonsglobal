@@ -258,6 +258,24 @@
     }
   }
 
+  /* Printing (e.g. the sample report): only the page content, no site chrome */
+  @media print {
+    header,
+    footer,
+    .no-print,
+    a[aria-label="Chat with us on WhatsApp"],
+    #main > section:first-child {
+      display: none !important;
+    }
+    body {
+      background: #fff;
+    }
+    .js [data-reveal] {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
   /* Subtle latitude/longitude texture for light sections */
   .bg-grid {
     background-image:

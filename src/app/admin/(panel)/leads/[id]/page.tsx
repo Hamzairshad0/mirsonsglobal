@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Mail, MessageCircle, Trash2 } from "lucide-react";
-import { getLead } from "@/lib/leads";
+import { findMatches, getLead } from "@/lib/leads";
+import { Sparkles } from "lucide-react";
 import { FIELD_LABELS, STATUSES, STATUS_LABELS, TYPE_LABELS } from "@/lib/inquiry";
 import { whatsappLink } from "@/lib/site";
 import { formatDate, StatusBadge, TypeBadge } from "@/components/admin/AdminUi";
@@ -22,6 +23,7 @@ export default async function LeadPage({ params }: { params: Promise<{ id: strin
   if (!result) notFound();
   const { lead, notes } = result;
 
+  const matches = await findMatches(lead);
   const fields = Object.entries(lead.data).filter(
     ([k, v]) => k !== "consent" && v !== "" && v != null && !(Array.isArray(v) && v.length === 0)
   );
@@ -84,6 +86,40 @@ export default async function LeadPage({ params }: { params: Promise<{ id: strin
         </section>
 
         <div className="space-y-6">
+          {lead.type !== "consultation" && (
+            <section className="card p-6">
+              <h2 className="flex items-center gap-2 font-sans text-sm font-semibold text-navy-900">
+                <Sparkles className="h-4 w-4 text-gold-600" aria-hidden /> Possible {lead.type === "buyer" ? "suppliers" : "buyers"}
+              </h2>
+              <p className="mt-1 text-xs text-muted">
+                {lead.type === "buyer" ? "Manufacturer" : "Buyer"} leads with a matching product, market or buyer type.
+              </p>
+              {matches.length === 0 ? (
+                <p className="mt-4 text-sm text-muted">No matching leads yet. They appear here automatically as new inquiries arrive.</p>
+              ) : (
+                <ul className="mt-4 divide-y divide-line">
+                  {matches.map((m) => (
+                    <li key={m.lead.id} className="py-3">
+                      <div className="flex items-center justify-between gap-3">
+                        <Link href={`/admin/leads/${m.lead.id}`} className="truncate text-sm font-semibold text-navy-900 hover:underline">
+                          {m.lead.company || m.lead.name}
+                        </Link>
+                        <span className="shrink-0 rounded-full bg-gold-500/15 px-2 py-0.5 text-xs font-semibold text-gold-700">
+                          {m.score >= 8 ? "Strong" : m.score >= 5 ? "Good" : "Possible"} match
+                        </span>
+                      </div>
+                      <ul className="mt-1 space-y-0.5">
+                        {m.reasons.map((r) => (
+                          <li key={r} className="text-xs text-muted">• {r}</li>
+                        ))}
+                      </ul>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          )}
+
           <section className="card p-6">
             <h2 className="font-sans text-sm font-semibold text-navy-900">Pipeline</h2>
             {/* key remounts the form after a save so the fields show the stored values */}

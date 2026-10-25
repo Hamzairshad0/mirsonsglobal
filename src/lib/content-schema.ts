@@ -1,3 +1,13 @@
+import {
+  categoriesDefault,
+  industriesPageDefault,
+  offerDefault,
+  pilotDefault,
+  productsDefault,
+  sampleMetaDefault,
+  sampleRowsDefault,
+} from "./catalog-defaults";
+
 // Editable website content: types, default values and the field definitions the
 // admin content editor uses. Anything here can be changed from /admin/content
 // without touching code; the defaults are used until a section is saved.
@@ -24,7 +34,25 @@ export type Home = {
 };
 
 export type Service = { slug: string; title: string; summary: string; points: string; icon: string };
-export type Industry = { slug: string; name: string; description: string; products: string; image: string; active: boolean };
+export type IndustriesPage = { eyebrow: string; title: string; subtitle: string; intro: string };
+export type Category = { slug: string; name: string; summary: string; intro: string; image: string; active: boolean };
+export type Product = {
+  slug: string;
+  category: string;
+  name: string;
+  summary: string;
+  overview: string;
+  applications: string;
+  buyers: string;
+  support: string;
+  notice: string;
+  image: string;
+  active: boolean;
+};
+export type Offer = { receive: string; need: string };
+export type Pilot = { intro: string; inclusions: string; whoFor: string; timeline: string; pricing: string };
+export type SampleMeta = { title: string; client: string; product: string; markets: string; period: string; disclaimer: string };
+export type SampleRow = { company: string; country: string; website: string; fit: string; role: string; status: string; note: string };
 export type Market = { name: string; description: string };
 export type BuyerType = { title: string; description: string; icon: string };
 export type Faq = { question: string; answer: string };
@@ -34,7 +62,13 @@ export type ContentMap = {
   settings: Settings;
   home: Home;
   services: Service[];
-  industries: Industry[];
+  industriesPage: IndustriesPage;
+  categories: Category[];
+  products: Product[];
+  offer: Offer;
+  pilot: Pilot;
+  sampleMeta: SampleMeta;
+  sampleRows: SampleRow[];
   markets: Market[];
   buyerTypes: BuyerType[];
   faqs: Faq[];
@@ -59,7 +93,7 @@ export const defaults: ContentMap = {
     heroTitle: "Connecting Manufacturers with Qualified International Buyers",
     heroSubtitle:
       "We identify importers, distributors and commercial buyers in your target markets — and turn them into qualified sales conversations and pre-arranged business meetings.",
-    heroNote: "For manufacturers, suppliers, importers, distributors and industrial buyers.",
+    heroNote: "Specialising in stainless steel and copper — for manufacturers, suppliers, importers and industrial buyers.",
     ctaTitle: "Ready to Find Your Next Market?",
     ctaText:
       "Tell us what you manufacture, where you currently sell and which markets you want to enter. We will identify potential buyer segments and show you what an outbound campaign could look like.",
@@ -114,72 +148,13 @@ export const defaults: ContentMap = {
         "Two-sided requirement matching\nConfidential introductions\nFacilitated first meetings\nFollow-up until a clear outcome",
     },
   ],
-  industries: [
-    {
-      slug: "industrial-minerals",
-      name: "Industrial Minerals & Raw Materials",
-      description: "Bulk minerals and natural raw materials for construction, chemical and manufacturing use.",
-      products: "Rock salt & industrial salt\nGypsum & limestone\nBarite & talc\nMarble & granite\nSilica sand",
-      image: "/images/industries/industrial-minerals.webp",
-      active: true,
-    },
-    {
-      slug: "metals-steel",
-      name: "Metals & Steel Products",
-      description: "Ferrous and non-ferrous metals, semi-finished and finished steel products.",
-      products: "Steel pipes & tubes\nRebar & structural steel\nAluminium & copper products\nMetal scrap\nFasteners & fittings",
-      image: "/images/industries/metals-steel.webp",
-      active: true,
-    },
-    {
-      slug: "chemicals-polymers",
-      name: "Chemicals & Polymers",
-      description: "Industrial chemicals, plastics and polymer raw materials for processors and converters.",
-      products: "PVC, PET & PP resins\nCaustic soda & soda ash\nIndustrial solvents\nMasterbatches & additives",
-      image: "/images/industries/chemicals-polymers.webp",
-      active: true,
-    },
-    {
-      slug: "construction-materials",
-      name: "Construction & Building Materials",
-      description: "Materials and products for contractors, developers and building-material distributors.",
-      products: "Cement & clinker\nCeramic & porcelain tiles\nSanitary ware\nGlass & aluminium profiles",
-      image: "/images/industries/construction-materials.webp",
-      active: true,
-    },
-    {
-      slug: "textiles",
-      name: "Textiles & Technical Fabrics",
-      description: "Yarns, fabrics and made-ups for garment makers, wholesalers and industrial users.",
-      products: "Cotton & blended yarns\nGrey & finished fabrics\nHome textiles & towels\nWorkwear & technical fabrics",
-      image: "/images/industries/textiles.webp",
-      active: true,
-    },
-    {
-      slug: "agri-commodities",
-      name: "Agri-Commodities & Food Ingredients",
-      description: "Agricultural commodities and ingredients for importers, processors and food manufacturers.",
-      products: "Rice & pulses\nSesame & oilseeds\nSpices & dried herbs\nHimalayan pink salt",
-      image: "/images/industries/agri-commodities.webp",
-      active: true,
-    },
-    {
-      slug: "packaging",
-      name: "Packaging Materials",
-      description: "Industrial and consumer packaging for manufacturers, exporters and distributors.",
-      products: "Corrugated cartons\nWoven polypropylene bags\nFlexible packaging films\nPaper & board",
-      image: "/images/industries/packaging.webp",
-      active: true,
-    },
-    {
-      slug: "electrical-equipment",
-      name: "Electrical, Solar & Industrial Equipment",
-      description: "Equipment and components for EPC contractors, OEMs and industrial projects.",
-      products: "Cables & wires\nSolar panels & mounting structures\nPumps & motors\nSwitchgear & components",
-      image: "/images/industries/electrical-equipment.webp",
-      active: true,
-    },
-  ],
+  industriesPage: industriesPageDefault,
+  categories: categoriesDefault,
+  products: productsDefault,
+  offer: offerDefault,
+  pilot: pilotDefault,
+  sampleMeta: sampleMetaDefault,
+  sampleRows: sampleRowsDefault,
   markets: [
     { name: "Middle East & GCC", description: "UAE, Saudi Arabia, Qatar, Oman, Kuwait and Bahrain." },
     { name: "Europe", description: "Western, Central and Eastern European importers and distributors." },
@@ -211,7 +186,7 @@ export const defaults: ContentMap = {
     {
       question: "Which industries do you work with?",
       answer:
-        "We currently focus on selected industrial raw materials and B2B product categories such as minerals, metals, chemicals, construction materials, textiles, agri-commodities, packaging and industrial equipment. If your category is not listed, contact us — we assess each request individually.",
+        "We focus on two industries where we can research buyers and suppliers in depth: stainless steel (sheets, coils, pipes and tubes, and plates) and copper (busbars, wire rods, tubes and pipes, and cathodes). Requests for related industrial products are assessed individually.",
     },
     {
       question: "How do you qualify a lead?",
@@ -239,14 +214,14 @@ export const defaults: ContentMap = {
     siteDescription:
       "Mirsons Global helps manufacturers and suppliers find qualified international buyers — importers, distributors, wholesalers and industrial purchasers — through targeted research, outreach and pre-arranged business meetings.",
     keywords:
-      "B2B lead generation, international buyers, find distributors, importers, buyer supplier matchmaking, sourcing agent, appointment setting, export sales pipeline",
+      "stainless steel buyers, copper buyers, stainless steel coils, copper busbars, copper cathodes, B2B lead generation, international buyers, find distributors, buyer supplier matchmaking, export sales pipeline",
   },
 };
 
 // ---- Field definitions for the admin editor ----
 
-export type FieldType = "text" | "textarea" | "lines" | "boolean" | "icon";
-export type FieldSpec = { name: string; label: string; type: FieldType; help?: string };
+export type FieldType = "text" | "textarea" | "lines" | "boolean" | "icon" | "select";
+export type FieldSpec = { name: string; label: string; type: FieldType; help?: string; options?: string[] };
 export type SectionSpec = {
   key: ContentKey;
   title: string;
@@ -310,24 +285,111 @@ export const sections: SectionSpec[] = [
     ],
   },
   {
-    key: "industries",
-    title: "Industries",
-    description: "Industry categories you serve. Untick “Show on website” to hide one without deleting it.",
+    key: "industriesPage",
+    title: "Industries & Products page",
+    description: "Headline and introduction of the Industries & Products page.",
+    kind: "object",
+    fields: [
+      { name: "eyebrow", label: "Small heading above title", type: "text" },
+      { name: "title", label: "Main headline", type: "text" },
+      { name: "subtitle", label: "Subtitle", type: "text" },
+      { name: "intro", label: "Introduction", type: "textarea", help: "Leave a blank line between paragraphs" },
+    ],
+  },
+  {
+    key: "categories",
+    title: "Product categories",
+    description: "Stainless steel and copper category pages. Untick “Show on website” to hide a category.",
     kind: "list",
-    itemLabel: "industry",
+    itemLabel: "category",
     titleField: "name",
     fields: [
-      { name: "name", label: "Industry name", type: "text" },
-      { name: "slug", label: "Anchor (url-friendly)", type: "text" },
-      { name: "description", label: "Description", type: "textarea" },
-      { name: "products", label: "Example products", type: "lines", help: "One product per line" },
-      {
-        name: "image",
-        label: "Photo",
-        type: "text",
-        help: "Path of an image in the website, e.g. /images/industries/textiles.webp — leave empty for the default photo",
-      },
+      { name: "name", label: "Category name", type: "text" },
+      { name: "slug", label: "Page address", type: "text", help: "Used in the URL: /industries/<this>. Products link to it." },
+      { name: "summary", label: "Short summary (cards)", type: "textarea" },
+      { name: "intro", label: "Introduction", type: "textarea", help: "Leave a blank line between paragraphs" },
+      { name: "image", label: "Photo", type: "text", help: "e.g. /images/products/copper.webp — leave empty for the default" },
       { name: "active", label: "Show on website", type: "boolean" },
+    ],
+  },
+  {
+    key: "products",
+    title: "Products",
+    description: "Products shown on the category pages and in the inquiry forms. Untick “Show on website” to hide one.",
+    kind: "list",
+    itemLabel: "product",
+    titleField: "name",
+    fields: [
+      { name: "name", label: "Product name", type: "text" },
+      { name: "category", label: "Category", type: "select", options: ["stainless-steel", "copper"], help: "Must match a category's page address" },
+      { name: "slug", label: "Anchor (url-friendly)", type: "text" },
+      { name: "summary", label: "Short summary (cards)", type: "textarea" },
+      { name: "overview", label: "Product overview", type: "textarea", help: "Leave a blank line between paragraphs" },
+      { name: "applications", label: "Key industrial applications", type: "lines", help: "One per line" },
+      { name: "buyers", label: "Target industries and buyers", type: "textarea" },
+      { name: "support", label: "How Mirsons Global supports this sector", type: "textarea" },
+      { name: "notice", label: "Important notice (optional)", type: "textarea", help: "Shown as a highlighted note, e.g. due-diligence reminders" },
+      { name: "image", label: "Photo", type: "text", help: "e.g. /images/products/cu-busbars.webp — leave empty for the category photo" },
+      { name: "active", label: "Show on website", type: "boolean" },
+    ],
+  },
+  {
+    key: "offer",
+    title: "What manufacturers receive",
+    description: "The concrete offer shown on the homepage, Manufacturers and Pilot pages.",
+    kind: "object",
+    fields: [
+      { name: "receive", label: "What the manufacturer receives", type: "lines", help: "One item per line" },
+      { name: "need", label: "What we need from the manufacturer", type: "lines", help: "One item per line" },
+    ],
+  },
+  {
+    key: "pilot",
+    title: "Pilot Programme (paid service)",
+    description: "Content of the Pilot Programme page.",
+    kind: "object",
+    fields: [
+      { name: "intro", label: "Introduction", type: "textarea" },
+      { name: "inclusions", label: "What the pilot includes", type: "lines", help: "One item per line" },
+      { name: "whoFor", label: "Who it is for", type: "lines", help: "One item per line" },
+      { name: "timeline", label: "Typical timeline", type: "lines", help: "One step per line, e.g. “Week 1 — …”" },
+      { name: "pricing", label: "Pricing note", type: "textarea" },
+    ],
+  },
+  {
+    key: "sampleMeta",
+    title: "Sample report — header",
+    description: "Title, scope and disclaimer of the sample buyer-research report.",
+    kind: "object",
+    fields: [
+      { name: "title", label: "Report title", type: "text" },
+      { name: "client", label: "Prepared for", type: "text" },
+      { name: "product", label: "Product", type: "text" },
+      { name: "markets", label: "Target markets", type: "text" },
+      { name: "period", label: "Period", type: "text" },
+      { name: "disclaimer", label: "Disclaimer (keep if data is illustrative)", type: "textarea" },
+    ],
+  },
+  {
+    key: "sampleRows",
+    title: "Sample report — companies",
+    description: "Rows of the sample buyer-research report.",
+    kind: "list",
+    itemLabel: "company",
+    titleField: "company",
+    fields: [
+      { name: "company", label: "Company name", type: "text" },
+      { name: "country", label: "Country", type: "text" },
+      { name: "website", label: "Website", type: "text" },
+      { name: "fit", label: "Product fit", type: "textarea" },
+      { name: "role", label: "Decision-maker role", type: "text" },
+      {
+        name: "status",
+        label: "Qualification status",
+        type: "select",
+        options: ["Qualified", "Interested", "In conversation", "Researching", "No response yet", "Not a fit"],
+      },
+      { name: "note", label: "Note", type: "text" },
     ],
   },
   {
@@ -380,12 +442,24 @@ export const sections: SectionSpec[] = [
   },
 ];
 
-const DEFAULT_INDUSTRY_IMAGE = "/images/containers-aerial.webp";
+const FALLBACK_IMAGE = "/images/industries-hero.webp";
 
-// Saved content may predate the image field, so fall back to the default photo for that industry.
-export function industryImage(ind: Pick<Industry, "slug" | "image">): string {
-  if (ind.image && ind.image.startsWith("/")) return ind.image;
-  return defaults.industries.find((d) => d.slug === ind.slug)?.image ?? DEFAULT_INDUSTRY_IMAGE;
+export function categoryImage(c: Pick<Category, "slug" | "image">): string {
+  if (c.image?.startsWith("/")) return c.image;
+  return defaults.categories.find((d) => d.slug === c.slug)?.image ?? FALLBACK_IMAGE;
+}
+
+export function productImage(p: Pick<Product, "slug" | "image" | "category">): string {
+  if (p.image?.startsWith("/")) return p.image;
+  return defaults.products.find((d) => d.slug === p.slug)?.image ?? categoryImage({ slug: p.category, image: "" });
+}
+
+/** Splits a textarea into paragraphs (blank line between paragraphs). */
+export function paragraphs(value: string): string[] {
+  return value
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean);
 }
 
 export function lines(value: string): string[] {

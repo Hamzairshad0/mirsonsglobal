@@ -2,13 +2,31 @@ export function siteUrl() {
   return (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/$/, "");
 }
 
-export const NAV = [
+export type NavItem = { href: string; label: string; children?: { href: string; label: string; note?: string }[] };
+
+export const NAV: NavItem[] = [
   { href: "/about", label: "About" },
-  { href: "/services", label: "Services" },
+  {
+    href: "/services",
+    label: "Services",
+    children: [
+      { href: "/services", label: "Our Services", note: "Lead generation, sourcing and matchmaking" },
+      { href: "/pilot", label: "Pilot Programme", note: "Paid, time-limited market test" },
+      { href: "/sample-report", label: "Sample Report", note: "See a buyer-research deliverable" },
+      { href: "/how-it-works", label: "How It Works", note: "Our step-by-step process" },
+    ],
+  },
   { href: "/manufacturers", label: "For Manufacturers" },
   { href: "/buyers", label: "For Buyers" },
-  { href: "/industries", label: "Industries" },
-  { href: "/how-it-works", label: "How It Works" },
+  {
+    href: "/industries",
+    label: "Industries & Products",
+    children: [
+      { href: "/industries", label: "Overview", note: "Our priority industries" },
+      { href: "/industries/stainless-steel", label: "Stainless Steel", note: "Sheets, coils, pipes & tubes, plates" },
+      { href: "/industries/copper", label: "Copper", note: "Busbars, wire rods, tubes & pipes, cathodes" },
+    ],
+  },
   { href: "/contact", label: "Contact" },
 ];
 

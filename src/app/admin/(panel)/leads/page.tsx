@@ -1,20 +1,22 @@
 import Link from "next/link";
 import { Download, Search } from "lucide-react";
 import { listLeads } from "@/lib/leads";
+import { getProductOptions } from "@/lib/content";
 import { INQUIRY_TYPES, STATUSES, STATUS_LABELS, TYPE_LABELS } from "@/lib/inquiry";
 import { formatDate, PageTitle, StatusBadge, TypeBadge } from "@/components/admin/AdminUi";
 
 export const metadata = { title: "Leads" };
 
-type SP = { q?: string; type?: string; status?: string; due?: string };
+type SP = { q?: string; type?: string; status?: string; due?: string; product?: string };
 
 export default async function LeadsPage({ searchParams }: { searchParams: Promise<SP> }) {
-  const sp = await searchParams;
+  const [sp, products] = await Promise.all([searchParams, getProductOptions()]);
   const filters = {
     q: sp.q?.trim() || undefined,
     type: INQUIRY_TYPES.includes(sp.type as never) ? sp.type : undefined,
     status: STATUSES.includes(sp.status as never) ? sp.status : undefined,
     due: sp.due ? "1" : undefined,
+    product: sp.product && products.includes(sp.product) ? sp.product : undefined,
   };
   const leads = await listLeads(filters);
   const qs = new URLSearchParams(Object.entries(filters).filter(([, v]) => v) as [string, string][]).toString();
@@ -32,7 +34,7 @@ export default async function LeadsPage({ searchParams }: { searchParams: Promis
         }
       />
 
-      <form className="card mb-6 grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-[1fr_200px_200px_auto_auto] lg:items-center">
+      <form className="card mb-6 grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-[1fr_180px_180px_200px_auto_auto] lg:items-center">
         <label className="relative">
           <span className="sr-only">Search</span>
           <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted" aria-hidden />
@@ -61,6 +63,17 @@ export default async function LeadsPage({ searchParams }: { searchParams: Promis
             {STATUSES.map((s) => (
               <option key={s} value={s}>
                 {STATUS_LABELS[s]}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          <span className="sr-only">Product</span>
+          <select name="product" defaultValue={filters.product ?? ""} className="field-input">
+            <option value="">All products</option>
+            {products.map((p) => (
+              <option key={p} value={p}>
+                {p}
               </option>
             ))}
           </select>

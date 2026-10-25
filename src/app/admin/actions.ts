@@ -5,7 +5,8 @@ import { redirect } from "next/navigation";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { checkPassword, createSession, destroySession, isAuthenticated } from "@/lib/auth";
 import { rateLimit } from "@/lib/rate-limit";
-import { addNote, deleteLead, deleteNote, updateLead } from "@/lib/leads";
+import { addNote, deleteLead, deleteNote, setStatus, updateLead } from "@/lib/leads";
+import { sendDailyDigest } from "@/lib/digest";
 import { CONTENT_TAG, resetContent, saveContent } from "@/lib/content";
 import { sections, type ContentKey } from "@/lib/content-schema";
 
@@ -81,4 +82,21 @@ export async function resetContentAction(key: ContentKey) {
   await resetContent(key);
   refreshSite();
   redirect(`/admin/content/${key}?reset=1`);
+}
+
+export async function moveLeadAction(id: number, status: string): Promise<{ ok: boolean; error?: string }> {
+  await guard();
+  try {
+    await setStatus(id, status);
+    revalidatePath("/admin", "layout");
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: err instanceof Error ? err.message : "Could not update" };
+  }
+}
+
+export async function sendDigestNowAction(): Promise<{ ok: boolean; message: string }> {
+  await guard();
+  const result = await sendDailyDigest();
+  return { ok: result.status !== "failed", message: result.message };
 }

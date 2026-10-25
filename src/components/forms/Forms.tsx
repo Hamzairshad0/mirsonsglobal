@@ -24,7 +24,7 @@ function ContactFields({ companyRequired = true }: { companyRequired?: boolean }
   );
 }
 
-export function ManufacturerForm({ categories }: { categories: string[] }) {
+export function ManufacturerForm({ products }: { products: string[] }) {
   return (
     <InquiryForm type="manufacturer" submitLabel="Find Qualified Buyers">
       <FormSection title="Your company">
@@ -34,18 +34,18 @@ export function ManufacturerForm({ categories }: { categories: string[] }) {
       </FormSection>
 
       <FormSection title="Your products">
-        <SelectField name="category" label="Product category" required options={[...categories, "Other"]} />
+        <SelectField name="category" label="Product" required options={products} />
         <SelectField name="exportExperience" label="Export experience" options={EXPORT_EXPERIENCE} />
         <TextArea
           name="products"
           label="Products you want to sell"
           required
           rows={3}
-          placeholder="e.g. Galvanised steel pipes, 1/2” – 8”, ASTM A53"
+          placeholder="e.g. 304 / 316L cold-rolled coils, 2B finish, 0.4–3.0 mm, ASTM A240"
           className="sm:col-span-2"
         />
-        <TextField name="capacity" label="Production / supply capacity" placeholder="e.g. 2,000 MT per month" />
-        <TextField name="certifications" label="Certifications" placeholder="e.g. ISO 9001, CE, SGS" />
+        <TextField name="capacity" label="Production / supply capacity" placeholder="e.g. 1,500 MT per month" />
+        <TextField name="certifications" label="Certifications" placeholder="e.g. ISO 9001, mill test certificates (EN 10204 3.1)" />
       </FormSection>
 
       <FormSection title="Your target markets">
@@ -60,7 +60,7 @@ export function ManufacturerForm({ categories }: { categories: string[] }) {
   );
 }
 
-export function BuyerForm({ categories }: { categories: string[] }) {
+export function BuyerForm({ products }: { products: string[] }) {
   return (
     <InquiryForm type="buyer" submitLabel="Submit Sourcing Requirements">
       <FormSection title="Your company">
@@ -69,17 +69,17 @@ export function BuyerForm({ categories }: { categories: string[] }) {
       </FormSection>
 
       <FormSection title="Product requirement">
-        <SelectField name="category" label="Product category" required options={[...categories, "Other"]} />
-        <TextField name="product" label="Product required" required placeholder="e.g. PVC resin K67" />
+        <SelectField name="category" label="Product" required options={products} />
+        <TextField name="product" label="Product required" required placeholder="e.g. Copper busbars 10 × 100 mm, C11000" />
         <TextArea
           name="specifications"
           label="Specifications & quality requirements"
           required
           rows={4}
-          placeholder="Grade, size, standards, packaging, certifications, inspection…"
+          placeholder="Grade, dimensions, finish, standards (e.g. ASTM, EN), packaging, certificates, inspection…"
           className="sm:col-span-2"
         />
-        <TextField name="quantity" label="Quantity" required placeholder="e.g. 500 MT / 2 x 40ft containers" />
+        <TextField name="quantity" label="Quantity" required placeholder="e.g. 200 MT per month / 2 × 20ft containers" />
         <SelectField name="frequency" label="Order frequency" options={ORDER_FREQUENCY} />
       </FormSection>
 
@@ -87,7 +87,7 @@ export function BuyerForm({ categories }: { categories: string[] }) {
         <TextField name="destination" label="Destination port / city" required placeholder="e.g. Jebel Ali, UAE" />
         <SelectField name="incoterm" label="Preferred Incoterm" options={INCOTERMS} />
         <SelectField name="timeline" label="Purchasing timeline" required options={TIMELINES} />
-        <TextField name="targetPrice" label="Target price / budget" placeholder="e.g. USD 780 / MT CIF" />
+        <TextField name="targetPrice" label="Target price / budget" placeholder="e.g. LME + premium, or USD / MT CIF" />
         <TextArea name="message" label="Additional information" rows={3} className="sm:col-span-2" />
       </FormSection>
     </InquiryForm>

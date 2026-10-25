@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { leadStats, listLeads } from "@/lib/leads";
 import { INQUIRY_TYPES, STATUSES, STATUS_LABELS, TYPE_LABELS } from "@/lib/inquiry";
 import { formatDate, PageTitle, StatusBadge, TypeBadge } from "@/components/admin/AdminUi";
+import { DigestButton } from "@/components/admin/DigestButton";
 
 export const metadata = { title: "Overview" };
 
@@ -17,7 +18,15 @@ function last30Days() {
 }
 
 export default async function AdminHome() {
-  const [stats, recent] = await Promise.all([leadStats(), listLeads({}, 8)]);
+  const [stats, recent, all] = await Promise.all([leadStats(), listLeads({}, 8), listLeads({}, 2000)]);
+  const byProduct = Object.entries(
+    all.reduce<Record<string, number>>((acc, l) => {
+      const p = String(l.data.category ?? "");
+      if (p) acc[p] = (acc[p] ?? 0) + 1;
+      return acc;
+    }, {})
+  ).sort((a, b) => b[1] - a[1]);
+  const maxProduct = Math.max(1, ...byProduct.map(([, n]) => n));
   const days = last30Days();
   const max = Math.max(1, ...days.map((d) => stats.daily[d] ?? 0));
   const today = new Date().toISOString().slice(0, 10);
@@ -165,6 +174,40 @@ export default async function AdminHome() {
               ))}
             </ul>
           )}
+        </section>
+      </div>
+      <div className="mt-6 grid gap-6 xl:grid-cols-2">
+        <section className="card p-6">
+          <h2 className="font-sans text-sm font-semibold text-navy-900">Inquiries by product</h2>
+          {byProduct.length === 0 ? (
+            <p className="mt-4 text-sm text-muted">No product inquiries yet.</p>
+          ) : (
+            <ul className="mt-4 space-y-3">
+              {byProduct.map(([product, n]) => (
+                <li key={product}>
+                  <Link href={`/admin/leads?product=${encodeURIComponent(product)}`} className="group block">
+                    <span className="flex justify-between text-sm">
+                      <span className="text-muted group-hover:text-navy-900">{product}</span>
+                      <span className="font-semibold text-navy-900">{n}</span>
+                    </span>
+                    <span className="mt-1 block h-1.5 rounded-full bg-line">
+                      <span className="block h-full rounded-full bg-gold-500" style={{ width: `${(n / maxProduct) * 100}%` }} />
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+        <section className="card p-6">
+          <h2 className="font-sans text-sm font-semibold text-navy-900">Daily reminder email</h2>
+          <p className="mt-2 text-sm leading-relaxed text-muted">
+            Every morning at 09:00 (Pakistan time) the team receives an email with follow-ups due today or overdue and
+            inquiries from the last 24 hours. It needs the email (SMTP) settings and a <code>CRON_SECRET</code> in Vercel.
+          </p>
+          <div className="mt-5">
+            <DigestButton />
+          </div>
         </section>
       </div>
     </>

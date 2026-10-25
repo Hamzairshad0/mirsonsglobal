@@ -36,8 +36,21 @@ export async function getSiteContent() {
   return { settings, seo };
 }
 
-export async function getActiveIndustries() {
-  return (await getContent("industries")).filter((i) => i.active);
+/** Visible categories with their visible products, in admin order. */
+export async function getCatalog() {
+  const [categories, products] = await Promise.all([getContent("categories"), getContent("products")]);
+  const visible = categories.filter((c) => c.active);
+  return visible.map((c) => ({ ...c, products: products.filter((p) => p.active && p.category === c.slug) }));
+}
+
+/** Product names for the "Product" dropdown in the inquiry forms. */
+export async function getProductOptions(): Promise<string[]> {
+  const catalog = await getCatalog();
+  return [
+    ...catalog.flatMap((c) => c.products.map((p) => p.name)),
+    ...catalog.map((c) => `Other ${c.name.replace(/ Products$/, "").toLowerCase()} product`),
+    "Other",
+  ];
 }
 
 // Coerce editor input to the shape defined in content-schema so bad input can't break pages.

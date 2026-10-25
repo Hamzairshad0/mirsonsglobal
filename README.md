@@ -86,10 +86,25 @@ The local database is created automatically at `data/mirsons.db`.
    - reply by **Email** or **WhatsApp** with one click.
 5. **Export CSV** downloads the current filtered list for Excel or a CRM.
 
+### Pipeline, matches and reminders
+- **Pipeline** (`/admin/pipeline`) — every lead as a card in its status column. Drag a card to another column (or use
+  the menu on the card) to change its status.
+- **Possible buyers / suppliers** — on each manufacturer or buyer lead, the dashboard suggests leads from the other side
+  with the same product, a matching target country or a preferred buyer type, and explains why.
+- **Leads → Product filter** and **Overview → Inquiries by product** show demand per product.
+- **Daily reminder email** — every morning at 09:00 Pakistan time (04:00 UTC, `vercel.json`) the team gets follow-ups
+  due today/overdue and new inquiries. Needs the SMTP variables plus `CRON_SECRET` (any long random string) in
+  Vercel. *Overview → Send reminder email now* sends it on demand.
+
 ### Website content
 `/admin/content` → choose a section → edit → **Save changes**. The live site updates immediately.
 
-- **Industries** — add a new category, list example products (one per line), or untick *Show on website* to hide it.
+- **Products** and **Product categories** — the stainless steel and copper pages. Edit any product's overview,
+  applications, target buyers and photo; add a product (pick its category) or untick *Show on website* to hide it.
+  Products also fill the "Product" dropdown in both inquiry forms.
+- **What manufacturers receive** — the "what you receive / what we need from you" lists.
+- **Pilot Programme** — inclusions, timeline and pricing note of the paid pilot page.
+- **Sample report** — header and company rows of the illustrative report. Keep the disclaimer while the data is fictional.
 - **Contact details** — email, phone, WhatsApp number (digits only, with country code) and business hours.
 - **SEO** — default title and description for search engines.
 - *Restore default text* at the bottom of each section undoes all edits to that section.

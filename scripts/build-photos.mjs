@@ -6,7 +6,7 @@ import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 const RAW = "scripts/photos-raw";
 const OUT = "public/images";
 mkdirSync(RAW, { recursive: true });
-mkdirSync(`${OUT}/industries`, { recursive: true });
+mkdirSync(`${OUT}/products`, { recursive: true });
 
 // [output name, Unsplash photo id, width, quality, keep top fraction of the photo (optional)]
 const PHOTOS = [
@@ -20,14 +20,19 @@ const PHOTOS = [
   ["handshake", "1521791136064-7986c2920216", 1400, 62],
   ["business-meeting", "1758518731457-5ef826b75b3b", 1600, 62],
   ["video-call", "1606770347238-77fcfd29906c", 1200, 62],
-  ["industries/industrial-minerals", "1654461339694-128902c5c075", 800, 52],
-  ["industries/metals-steel", "1721622045835-51a5447f281c", 900, 60],
-  ["industries/chemicals-polymers", "1786532852011-443cba5dc9fe", 900, 60],
-  ["industries/construction-materials", "1768677903496-becc4be07258", 800, 48],
-  ["industries/textiles", "1675176785803-bffbbb0cd2f4", 900, 60],
-  ["industries/agri-commodities", "1644377949116-c4a6b529241c", 900, 60],
-  ["industries/packaging", "1700165644892-3dd6b67b25bc", 900, 60],
-  ["industries/electrical-equipment", "1509391366360-2e959784a276", 900, 60],
+  // Industries & products (stainless steel and copper)
+  ["industries-hero", "1763950865631-4ca11bebe017", 1600, 55],
+  ["sample-report", "1671404910386-8c2a9ae40efd", 1400, 58],
+  ["products/stainless-steel", "1697698532634-ea59b636ccea", 1600, 55],
+  ["products/copper", "1550979967-5839959d4cbc", 1600, 55],
+  ["products/ss-sheets", "1761434558206-2deda18ef237", 1000, 60],
+  ["products/ss-coils", "1697698532602-ccf880036281", 1000, 60],
+  ["products/ss-pipes-tubes", "1764835746713-34a671e73569", 1000, 60],
+  ["products/ss-plates", "1680866362357-d8192e20a7dc", 1000, 60],
+  ["products/cu-busbars", "1780034766312-73825064806c", 1000, 58],
+  ["products/cu-wire-rods", "1707409464255-e78eb873298a", 1000, 60],
+  ["products/cu-tubes-pipes", "1584774354932-62ceb99e6053", 1000, 60],
+  ["products/cu-cathodes", "1548357204-82fc6c4a0c67", 1000, 60],
 ];
 
 const credits = ["# Photo credits", "", "All photos from Unsplash (https://unsplash.com/license) — free for commercial use.", ""];

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { ChevronDown, Menu, X } from "lucide-react";
 import { NAV } from "@/lib/site";
 import { Logo } from "./Logo";
 
@@ -46,18 +46,44 @@ export function Header() {
         <nav aria-label="Main" className="hidden xl:block">
           <ul className="flex items-center gap-7">
             {NAV.map((item) => {
-              const active = pathname === item.href;
+              const active = item.children
+                ? item.children.some((c) => pathname === c.href || pathname.startsWith(`${c.href}/`))
+                : pathname === item.href;
+              const linkClass = `relative inline-flex items-center gap-1 text-[13.5px] font-medium transition-colors ${
+                active ? "text-gold-400" : "text-white/85 hover:text-white"
+              }`;
+              if (!item.children) {
+                return (
+                  <li key={item.href}>
+                    <Link href={item.href} aria-current={active ? "page" : undefined} className={linkClass}>
+                      {item.label}
+                    </Link>
+                  </li>
+                );
+              }
               return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    aria-current={active ? "page" : undefined}
-                    className={`relative text-[13.5px] font-medium transition-colors ${
-                      active ? "text-gold-400" : "text-white/85 hover:text-white"
-                    }`}
-                  >
+                // Opens on hover and on keyboard focus (focus-within); no JavaScript needed
+                <li key={item.href} className="group relative">
+                  <Link href={item.href} aria-haspopup="true" className={linkClass}>
                     {item.label}
+                    <ChevronDown className="h-3.5 w-3.5 transition-transform duration-200 group-hover:rotate-180 group-focus-within:rotate-180" aria-hidden />
                   </Link>
+                  <div className="invisible absolute top-full left-1/2 z-50 w-72 -translate-x-1/2 pt-4 opacity-0 transition-all duration-200 group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
+                    <ul className="overflow-hidden rounded-xl border border-white/10 bg-navy-950/98 p-2 shadow-2xl shadow-black/40 backdrop-blur">
+                      {item.children.map((c) => (
+                        <li key={c.href}>
+                          <Link
+                            href={c.href}
+                            aria-current={pathname === c.href ? "page" : undefined}
+                            className="block rounded-lg px-4 py-3 transition-colors hover:bg-white/5 focus-visible:bg-white/5"
+                          >
+                            <span className={`block text-sm font-medium ${pathname === c.href ? "text-gold-400" : "text-white"}`}>{c.label}</span>
+                            {c.note && <span className="mt-0.5 block text-xs text-white/50">{c.note}</span>}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </li>
               );
             })}
@@ -89,18 +115,34 @@ export function Header() {
                 Home
               </Link>
             </li>
-            {NAV.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className={`block border-b border-white/10 py-4 text-lg ${
-                    pathname === item.href ? "text-gold-400" : "text-white"
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
+            {NAV.map((item) =>
+              item.children ? (
+                <li key={item.href} className="border-b border-white/10 py-4">
+                  <span className="block text-xs font-semibold tracking-[0.18em] text-gold-400 uppercase">{item.label}</span>
+                  <ul className="mt-2">
+                    {item.children.map((c) => (
+                      <li key={c.href}>
+                        <Link
+                          href={c.href}
+                          className={`block py-2 pl-3 text-lg ${pathname === c.href ? "text-gold-400" : "text-white"}`}
+                        >
+                          {c.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ) : (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className={`block border-b border-white/10 py-4 text-lg ${pathname === item.href ? "text-gold-400" : "text-white"}`}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              )
+            )}
             <li className="pt-6">
               <Link href="/contact#consultation" className="btn-gold w-full">
                 Book a Consultation

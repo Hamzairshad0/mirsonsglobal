@@ -118,7 +118,7 @@ export const FIELD_LABELS: Record<string, string> = {
   country: "Country",
   jobTitle: "Job title",
   website: "Website",
-  category: "Product category",
+  category: "Product",
   products: "Products",
   capacity: "Production capacity",
   exportExperience: "Export experience",

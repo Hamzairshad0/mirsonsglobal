@@ -92,3 +92,57 @@ export async function sendInquiryEmails(i: InquiryEmail): Promise<"sent" | "fail
     return "failed";
   }
 }
+
+type DigestLead = { id: number; ref: string; type: string; company: string; name: string; country: string; summary: string; followUpDate: string | null; status: string };
+
+/** Morning summary for the team: follow-ups due today/overdue and leads from the last 24 hours. */
+export async function sendDigestEmail(due: DigestLead[], fresh: DigestLead[]): Promise<"sent" | "failed" | "skipped"> {
+  const t = transport();
+  if (!t) return "skipped";
+  const from = process.env.EMAIL_FROM || process.env.SMTP_USER!;
+  const team = process.env.NOTIFY_EMAIL || process.env.SMTP_USER!;
+  const site = process.env.NEXT_PUBLIC_SITE_URL || "";
+  const today = new Date().toISOString().slice(0, 10);
+
+  const list = (items: DigestLead[], showDate: boolean) =>
+    items.length === 0
+      ? `<p style="color:#5b6676;margin:0 0 8px">None.</p>`
+      : `<table style="border-collapse:collapse;width:100%;font-size:14px">${items
+          .map(
+            (l) => `<tr>
+              <td style="padding:8px 0;border-bottom:1px solid #eee;vertical-align:top">
+                <a href="${site}/admin/leads/${l.id}" style="color:#081526;font-weight:bold;text-decoration:none">${esc(l.company || l.name)}</a>
+                <span style="color:#5b6676"> · ${esc(l.country)} · ${esc(l.ref)}</span><br/>
+                <span style="color:#334155">${esc(l.summary)}</span>
+              </td>
+              ${
+                showDate
+                  ? `<td style="padding:8px 0 8px 12px;border-bottom:1px solid #eee;white-space:nowrap;vertical-align:top;color:${
+                      (l.followUpDate ?? "") < today ? "#dc2626" : "#081526"
+                    };font-weight:bold">${esc(l.followUpDate ?? "")}</td>`
+                  : ""
+              }
+            </tr>`
+          )
+          .join("")}</table>`;
+
+  try {
+    await t.sendMail({
+      from,
+      to: team,
+      subject: `Mirsons daily follow-ups — ${due.length} due, ${fresh.length} new`,
+      html: layout(
+        "Your follow-ups for today",
+        `<h2 style="font-size:15px;color:#8a6b30;margin:0 0 8px">Follow-ups due or overdue (${due.length})</h2>
+         ${list(due, true)}
+         <h2 style="font-size:15px;color:#8a6b30;margin:24px 0 8px">New inquiries in the last 24 hours (${fresh.length})</h2>
+         ${list(fresh, false)}
+         ${site ? `<p style="margin:24px 0 0"><a href="${site}/admin/pipeline" style="background:#c9a45c;color:#081526;padding:10px 18px;border-radius:4px;text-decoration:none;font-weight:bold">Open pipeline</a></p>` : ""}`
+      ),
+    });
+    return "sent";
+  } catch (err) {
+    console.error("[email] digest failed:", err);
+    return "failed";
+  }
+}

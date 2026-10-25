@@ -22,7 +22,7 @@ export type Lead = {
   updatedAt: string;
 };
 
-export type LeadFilters = { q?: string; type?: string; status?: string; due?: string };
+export type LeadFilters = { q?: string; type?: string; status?: string; due?: string; product?: string };
 
 export type NewInquiry = {
   type: InquiryType;
@@ -66,6 +66,51 @@ function toLead(r: Row): Lead {
 
 const OPEN = "status NOT IN ('won','closed')";
 
+// ---- Buyer ↔ manufacturer matching ----
+
+export type Match = { lead: Lead; score: number; reasons: string[] };
+
+const text = (v: unknown) => (Array.isArray(v) ? v.join(" ") : String(v ?? "")).toLowerCase();
+const industryOf = (product: string) =>
+  product.toLowerCase().includes("stainless") ? "stainless steel" : product.toLowerCase().includes("copper") ? "copper" : "";
+
+/** Scores how well a buyer and a manufacturer lead fit each other, with human-readable reasons. */
+export function scoreMatch(lead: Lead, candidate: Lead): Match {
+  const buyer = lead.type === "buyer" ? lead : candidate;
+  const maker = lead.type === "buyer" ? candidate : lead;
+  const reasons: string[] = [];
+  let score = 0;
+
+  const bp = String(buyer.data.category ?? "");
+  const mp = String(maker.data.category ?? "");
+  if (bp && bp === mp && bp !== "Other") {
+    score += 5;
+    reasons.push(`Same product: ${bp}`);
+  } else if (industryOf(bp) && industryOf(bp) === industryOf(mp)) {
+    score += 2;
+    reasons.push(`Same industry: ${industryOf(bp)}`);
+  }
+
+  const targets = text(maker.data.targetMarkets);
+  const places = [buyer.country, text(buyer.data.destination).split(",").pop()?.trim() ?? ""]
+    .map((p) => p.toLowerCase().trim())
+    .filter((p) => p.length > 2);
+  const place = places.find((p) => targets.includes(p));
+  if (place) {
+    score += 3;
+    reasons.push(`Buyer is in a target market (${place})`);
+  }
+
+  const wanted = text(maker.data.buyerTypes);
+  const buyerType = text(buyer.data.buyerType).replace(/\s*\/.*$/, "");
+  if (buyerType && wanted.includes(buyerType.slice(0, 6))) {
+    score += 1;
+    reasons.push(`Preferred buyer type (${buyer.data.buyerType})`);
+  }
+
+  return { lead: candidate, score, reasons };
+}
+
 function where(f: LeadFilters) {
   const clauses: string[] = [];
   const args: unknown[] = [];
@@ -83,6 +128,11 @@ function where(f: LeadFilters) {
   if (f.status) {
     clauses.push("status = ?");
     args.push(f.status);
+  }
+  if (f.product) {
+    // The product is stored inside the JSON form data, e.g. "category":"Copper Busbars"
+    clauses.push("data LIKE ?");
+    args.push(`%"category":${JSON.stringify(f.product)}%`);
   }
   if (f.due) {
     clauses.push(`follow_up_date IS NOT NULL AND follow_up_date <= ? AND ${OPEN}`);
@@ -144,6 +194,40 @@ export function makeRepo(getDb: () => Promise<Db>) {
         nowUtc(),
         id,
       ]);
+    },
+
+    async setStatus(id: number, status: string) {
+      if (!STATUSES.includes(status as Status)) throw new Error("Invalid status");
+      await (await getDb()).query("UPDATE inquiries SET status = ?, updated_at = ? WHERE id = ?", [status, nowUtc(), id]);
+    },
+
+    /** Leads from the other side (buyer ↔ manufacturer) that look like a commercial fit. */
+    async findMatches(lead: Lead, limit = 5): Promise<Match[]> {
+      if (lead.type === "consultation") return [];
+      const other = lead.type === "buyer" ? "manufacturer" : "buyer";
+      const rows = await (await getDb()).query(
+        "SELECT * FROM inquiries WHERE type = ? AND status <> 'closed' ORDER BY created_at DESC LIMIT 300",
+        [other]
+      );
+      return rows
+        .map(toLead)
+        .map((candidate) => scoreMatch(lead, candidate))
+        .filter((m) => m.score >= 2)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, limit);
+    },
+
+    /** Follow-ups due today or overdue, plus leads received in the last 24 hours. */
+    async dailyDigest() {
+      const d = await getDb();
+      const [due, fresh] = await Promise.all([
+        d.query(
+          `SELECT * FROM inquiries WHERE follow_up_date IS NOT NULL AND follow_up_date <= ? AND ${OPEN} ORDER BY follow_up_date ASC`,
+          [todayUtc()]
+        ),
+        d.query("SELECT * FROM inquiries WHERE created_at >= ? ORDER BY created_at DESC", [nowUtc(-1)]),
+      ]);
+      return { due: due.map(toLead), fresh: fresh.map(toLead) };
     },
 
     async addNote(id: number, body: string) {

@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Factory, ShoppingCart } from "lucide-react";
-import { getActiveIndustries, getContent } from "@/lib/content";
-import { industryImage } from "@/lib/content-schema";
+import { getCatalog, getContent } from "@/lib/content";
+import { categoryImage } from "@/lib/content-schema";
+import { OfferSection, productHref } from "@/components/Catalog";
 import { MANUFACTURER_PROCESS, WHAT_YOU_RECEIVE } from "@/lib/process";
 import { Icon } from "@/components/Icon";
 import { MatchmakingDiagram, Marquee, Ornament } from "@/components/Graphics";
@@ -39,14 +40,15 @@ const WHY = [
 ];
 
 export default async function HomePage() {
-  const [home, services, buyerTypes, faqs, settings, industries, markets] = await Promise.all([
+  const [home, services, buyerTypes, faqs, settings, catalog, markets, offer] = await Promise.all([
     getContent("home"),
     getContent("services"),
     getContent("buyerTypes"),
     getContent("faqs"),
     getContent("settings"),
-    getActiveIndustries(),
+    getCatalog(),
     getContent("markets"),
+    getContent("offer"),
   ]);
 
   return (
@@ -144,6 +146,10 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <div className="border-t border-line bg-white">
+        <OfferSection offer={offer} />
+      </div>
+
       {/* Who we connect */}
       <section className="bg-grid relative bg-sand py-20 sm:py-28">
         <div className="container-x">
@@ -232,46 +238,47 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Industries */}
+      {/* Priority industries & products */}
       <section className="py-20 sm:py-28">
         <div className="container-x">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <SectionHeading
-              eyebrow="Industries we serve"
-              title="Focused on industrial raw materials and B2B categories"
-              intro="We concentrate on categories where international buyers purchase in volume and relationships matter."
+              eyebrow="Industries & products"
+              title="Focused on stainless steel and copper"
+              intro="Two industries where we research suppliers and buyers in depth — with clearly defined products, grades and buyer types."
             />
             <Link href="/industries" className="btn-outline shrink-0 self-start lg:self-auto">
-              View industries <ArrowRight className="h-4 w-4" aria-hidden />
+              All products <ArrowRight className="h-4 w-4" aria-hidden />
             </Link>
           </div>
-          <ul className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {industries.map((ind, i) => (
-              <li key={ind.slug} data-reveal style={delay(i, 60)}>
-                <Link
-                  href={`/industries#${ind.slug}`}
-                  className="photo-zoom group relative flex aspect-[4/5] flex-col justify-end overflow-hidden rounded-xl bg-navy-900 p-6 text-white sm:aspect-[3/4]"
-                >
-                  <Image
-                    src={industryImage(ind)}
-                    alt=""
-                    fill
-                    quality={60}
-                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-                    className="object-cover"
-                  />
-                  <span className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/55 to-navy-950/5 transition-opacity duration-500 group-hover:opacity-90" aria-hidden />
-                  <span className="relative font-serif text-sm text-gold-400">{String(i + 1).padStart(2, "0")}</span>
-                  <span className="relative mt-2 flex items-end justify-between gap-3">
-                    <span className="font-serif text-xl leading-snug font-semibold">{ind.name}</span>
-                    <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/30 transition-colors duration-300 group-hover:border-gold-500 group-hover:bg-gold-500 group-hover:text-navy-950">
-                      <ArrowRight className="h-4 w-4" aria-hidden />
-                    </span>
-                  </span>
-                </Link>
-              </li>
+          <div className="mt-14 grid gap-6 lg:grid-cols-2">
+            {catalog.map((c, i) => (
+              <div key={c.slug} data-reveal style={delay(i, 120)} className="photo-zoom group relative overflow-hidden rounded-2xl bg-navy-900 text-white">
+                <Image src={categoryImage(c)} alt="" fill quality={55} sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover opacity-45" />
+                <span className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/75 to-navy-950/30" aria-hidden />
+                <div className="relative flex min-h-[26rem] flex-col justify-end p-8 sm:p-10">
+                  <span className="font-serif text-sm text-gold-400">{String(i + 1).padStart(2, "0")}</span>
+                  <h3 className="mt-2 text-3xl font-semibold">{c.name}</h3>
+                  <p className="mt-3 max-w-md text-white/70">{c.summary}</p>
+                  <ul className="mt-6 flex flex-wrap gap-2">
+                    {c.products.map((p) => (
+                      <li key={p.slug}>
+                        <Link
+                          href={productHref(p)}
+                          className="inline-block rounded-full border border-white/25 bg-white/5 px-3.5 py-1.5 text-sm backdrop-blur-sm transition-colors hover:border-gold-500 hover:bg-gold-500 hover:text-navy-950"
+                        >
+                          {p.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                  <Link href={`/industries/${c.slug}`} className="mt-8 inline-flex items-center gap-2 self-start text-sm font-semibold text-gold-400 hover:text-gold-300">
+                    Explore {c.name.replace(/ Products$/, "").toLowerCase()} <ArrowRight className="h-4 w-4" aria-hidden />
+                  </Link>
+                </div>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       </section>
 
