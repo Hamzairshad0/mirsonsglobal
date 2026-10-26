@@ -48,6 +48,9 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
       <section className="border-b border-line bg-white py-16 sm:py-20">
         <div className="container-x grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:gap-16">
           <div data-reveal className="space-y-5 text-[17px] leading-relaxed text-muted">
+            <h2 className="text-3xl font-semibold text-navy-900 sm:text-4xl">
+              <span className="text-gold-600">{index + 1}.</span> {category.name}
+            </h2>
             {intro.map((p, i) => (
               <p key={i} className={i === 0 ? "font-serif text-2xl leading-snug text-navy-900" : ""}>
                 {p}
@@ -91,9 +94,14 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
 
                 <div>
                   <div data-reveal>
-                    <p className="eyebrow">Product overview</p>
-                    <h2 className="mt-4 text-3xl leading-tight font-semibold text-navy-900 sm:text-4xl">{p.name}</h2>
-                    <div className="mt-5 space-y-4 leading-relaxed text-muted">
+                    <h2 className="text-3xl leading-tight font-semibold text-navy-900 sm:text-4xl">
+                      <span className="text-gold-600">
+                        {index + 1}.{i + 1}
+                      </span>{" "}
+                      {p.name}
+                    </h2>
+                    <h3 className="eyebrow mt-6">Product overview</h3>
+                    <div className="mt-4 space-y-4 leading-relaxed text-muted">
                       {paragraphs(p.overview).map((para, k) => (
                         <p key={k}>{para}</p>
                       ))}
@@ -112,13 +120,13 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                   <div className="mt-10 grid gap-5 sm:grid-cols-2">
                     <div data-reveal className="card p-6">
                       <h3 className="flex items-center gap-2 font-sans text-sm font-semibold tracking-[0.14em] text-navy-900 uppercase">
-                        <Users className="h-4 w-4 text-gold-600" aria-hidden /> Target buyers
+                        <Users className="h-4 w-4 shrink-0 text-gold-600" aria-hidden /> Target industries and buyers
                       </h3>
                       <p className="mt-3 text-sm leading-relaxed text-muted">{p.buyers}</p>
                     </div>
                     <div data-reveal className="rounded-xl bg-navy-900 p-6 text-white">
                       <h3 className="flex items-center gap-2 font-sans text-sm font-semibold tracking-[0.14em] text-gold-400 uppercase">
-                        <Handshake className="h-4 w-4" aria-hidden /> How we support
+                        <Handshake className="h-4 w-4 shrink-0" aria-hidden /> How Mirsons Global supports this sector
                       </h3>
                       <p className="mt-3 text-sm leading-relaxed text-white/75">{p.support}</p>
                     </div>

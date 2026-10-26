@@ -131,6 +131,7 @@ export default async function SampleReportPage() {
                     <tr>
                       <th className="px-4 py-3 font-medium">Company</th>
                       <th className="px-4 py-3 font-medium">Country</th>
+                      <th className="px-4 py-3 font-medium">Website</th>
                       <th className="px-4 py-3 font-medium">Product fit</th>
                       <th className="px-4 py-3 font-medium">Decision-maker role</th>
                       <th className="px-4 py-3 font-medium">Qualification status</th>
@@ -139,11 +140,9 @@ export default async function SampleReportPage() {
                   <tbody className="divide-y divide-line">
                     {rows.map((r, i) => (
                       <tr key={i} className="align-top odd:bg-white even:bg-ivory">
-                        <td className="px-4 py-4">
-                          <span className="font-semibold text-navy-900">{r.company}</span>
-                          <span className="mt-0.5 block text-xs text-muted">{r.website}</span>
-                        </td>
-                        <td className="px-4 py-4 whitespace-nowrap text-ink/80">{r.country}</td>
+                        <td className="px-4 py-4 font-semibold text-navy-900">{r.company}</td>
+                        <td className="px-4 py-4 text-ink/80">{r.country}</td>
+                        <td className="px-4 py-4 text-xs break-all text-ink/70">{r.website}</td>
                         <td className="px-4 py-4 text-ink/80">{r.fit}</td>
                         <td className="px-4 py-4 text-ink/80">{r.role}</td>
                         <td className="px-4 py-4">
@@ -163,9 +162,8 @@ export default async function SampleReportPage() {
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <p className="font-semibold text-navy-900">{r.company}</p>
-                        <p className="text-xs text-muted">
-                          {r.country} · {r.website}
-                        </p>
+                        <p className="text-xs text-muted">{r.country}</p>
+                        <p className="text-xs text-muted">Website: {r.website}</p>
                       </div>
                       <Status value={r.status} />
                     </div>
