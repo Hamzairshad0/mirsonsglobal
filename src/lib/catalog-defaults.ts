@@ -1,7 +1,17 @@
 // Default copy for the Industries & Products pages, the concrete offer, the pilot programme
 // and the sample report. Everything here is editable from Admin → Website content.
 // Multi-paragraph fields use a blank line between paragraphs; list fields use one item per line.
-import type { Category, IndustriesPage, Offer, Pilot, Product, SampleMeta, SampleRow } from "./content-schema";
+import type { Category, Founder, IndustriesPage, Offer, Pilot, Product, SampleMeta, SampleRow } from "./content-schema";
+
+export const founderDefault: Founder = {
+  name: "Taha Mir",
+  title: "Founder | Mirsons Global",
+  role: "International B2B Business Development",
+  quote:
+    "Our mission is to help manufacturers build meaningful international business relationships through research-driven buyer acquisition, professional outreach and reliable business introductions.",
+  image: "/images/founder.webp",
+  show: true,
+};
 
 export const industriesPageDefault: IndustriesPage = {
   eyebrow: "Industries & Products",
@@ -19,7 +29,7 @@ export const categoriesDefault: Category[] = [
   {
     slug: "stainless-steel",
     name: "Stainless Steel Products",
-    summary: "Sheets, coils, pipes and tubes, and plates for fabrication, processing and industrial equipment.",
+    summary: "Coils, sheets, plates, pipes and tubes.",
     intro: [
       "Stainless steel is an essential material across manufacturing, construction, food processing, industrial engineering, transportation and commercial equipment production. Its corrosion resistance, durability, strength and versatility make it suitable for a wide range of industrial applications.",
       "Mirsons Global supports business connections involving stainless steel products, helping manufacturers and suppliers identify relevant importers, distributors, stockholders, processors and industrial end users.",
@@ -30,13 +40,25 @@ export const categoriesDefault: Category[] = [
   {
     slug: "copper",
     name: "Copper Products",
-    summary: "Busbars, wire rods, tubes and pipes, and cathodes for electrical, HVAC and processing industries.",
+    summary: "Busbars, wire rods, cathodes, tubes and pipes.",
     intro: [
       "Copper is an important industrial metal valued for its electrical conductivity, thermal conductivity, formability and suitability for a broad range of electrical and mechanical applications.",
       "It plays a significant role in power distribution, electrical equipment, cable manufacturing, renewable energy systems, electronics, heating and cooling equipment, and industrial processing.",
       "Mirsons Global supports business connections across selected copper product categories, helping manufacturers, processors, distributors and industrial suppliers explore relevant international markets.",
     ].join("\n\n"),
     image: "/images/products/copper.webp",
+    active: true,
+  },
+  {
+    slug: "industrial-raw-materials",
+    name: "Industrial Raw Materials",
+    summary: "Selected raw materials for manufacturing and processing supply chains.",
+    intro: [
+      "Alongside stainless steel and copper, Mirsons Global supports selected industrial raw materials used in manufacturing, processing and construction supply chains.",
+      "Each raw-material opportunity is assessed individually — based on the material specification, grade or purity, volumes, origin documentation and target market — before any research or outreach begins.",
+      "Tell us the material you produce or need, and we will confirm whether we can support it and how we would approach the market.",
+    ].join("\n\n"),
+    image: "/images/products/raw-materials.webp",
     active: true,
   },
 ];

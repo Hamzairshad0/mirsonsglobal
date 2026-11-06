@@ -10,6 +10,7 @@ const COLUMNS = [
     links: [
       { href: "/industries/stainless-steel", label: "Stainless Steel" },
       { href: "/industries/copper", label: "Copper" },
+      { href: "/industries/industrial-raw-materials", label: "Industrial Raw Materials" },
       { href: "/industries#products", label: "All priority products" },
       { href: "/contact#consultation", label: "Book a Consultation" },
     ],

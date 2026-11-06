@@ -61,7 +61,7 @@ export default async function IndustriesPage() {
                   <Image src={categoryImage(c)} alt="" fill quality={55} sizes="(min-width: 1024px) 35vw, 100vw" className="object-cover opacity-60" />
                   <span className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/60 to-transparent" aria-hidden />
                   <span className="relative text-xs font-semibold tracking-[0.18em] text-gold-400 uppercase">
-                    {c.products.length} priority products
+                    {c.products.length > 0 ? `${c.products.length} priority products` : "Assessed case by case"}
                   </span>
                   <span className="relative mt-2 flex items-end justify-between gap-4">
                     <span className="font-serif text-2xl font-semibold">{c.name}</span>
@@ -81,7 +81,7 @@ export default async function IndustriesPage() {
           <SectionHeading
             eyebrow="Priority industries & products"
             title="The exact product categories we support"
-            intro="We focus on two industries where we can research suppliers and buyers in depth, rather than covering many unrelated markets."
+            intro="Our initial focus is three industries where we can research suppliers and buyers in depth, rather than covering many unrelated markets."
           />
           <div className="mt-16 space-y-20">
             {catalog.map((c, ci) => (
@@ -96,11 +96,31 @@ export default async function IndustriesPage() {
                     All {c.name.replace(/ Products$/, "").toLowerCase()} details <ArrowRight className="h-4 w-4" aria-hidden />
                   </Link>
                 </div>
-                <ul className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-                  {c.products.map((p, i) => (
-                    <ProductCard key={p.slug} product={p} index={i} />
-                  ))}
-                </ul>
+                {c.products.length > 0 ? (
+                  <ul className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                    {c.products.map((p, i) => (
+                      <ProductCard key={p.slug} product={p} index={i} />
+                    ))}
+                  </ul>
+                ) : (
+                  <Link
+                    href={`/industries/${c.slug}`}
+                    data-reveal
+                    className="photo-zoom group relative mt-8 flex min-h-56 items-end overflow-hidden rounded-xl bg-navy-900 p-8 text-white"
+                  >
+                    <Image src={categoryImage(c)} alt="" fill quality={50} sizes="100vw" className="object-cover opacity-50" />
+                    <span className="absolute inset-0 bg-gradient-to-r from-navy-950 via-navy-950/70 to-transparent" aria-hidden />
+                    <span className="relative max-w-xl">
+                      <span className="block font-serif text-2xl font-semibold">Selected materials, assessed case by case</span>
+                      <span className="mt-2 block text-white/70">
+                        Tell us the material, grade, volumes and target market — we will confirm whether we can support it.
+                      </span>
+                      <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-gold-400 group-hover:text-gold-300">
+                        Discuss a raw material <ArrowRight className="h-4 w-4" aria-hidden />
+                      </span>
+                    </span>
+                  </Link>
+                )}
               </div>
             ))}
           </div>

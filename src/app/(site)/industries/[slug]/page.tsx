@@ -36,7 +36,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
   return (
     <>
       <PageHero image={categoryImage(category)} eyebrow="Industries & Products" title={category.name} intro={category.summary}>
-        <Link href={`/manufacturers?product=${encodeURIComponent(category.products[0]?.name ?? "")}#inquiry`} className="btn-gold">
+        <Link href={`/manufacturers?product=${encodeURIComponent(category.products[0]?.name ?? category.name)}#inquiry`} className="btn-gold">
           Find Qualified Buyers <ArrowRight className="h-4 w-4" aria-hidden />
         </Link>
         <Link href="/buyers#requirements" className="btn-outline-light">
@@ -57,6 +57,27 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
               </p>
             ))}
           </div>
+          {category.products.length === 0 ? (
+            <div data-reveal className="self-start rounded-2xl bg-navy-900 p-7 text-white">
+              <p className="text-xs font-semibold tracking-[0.18em] text-gold-400 uppercase">To assess a material, we need</p>
+              <ul className="mt-5 space-y-3 text-sm text-white/80">
+                {[
+                  "Material name, grade or purity and applicable standards",
+                  "Form, packaging and available volumes",
+                  "Origin and supporting documentation",
+                  "Target markets and buyer types",
+                ].map((t) => (
+                  <li key={t} className="flex gap-3">
+                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rotate-45 bg-gold-500" aria-hidden />
+                    {t}
+                  </li>
+                ))}
+              </ul>
+              <Link href={`/manufacturers?product=${encodeURIComponent(category.name)}#inquiry`} className="btn-gold mt-7 w-full">
+                Tell us about your material <ArrowRight className="h-4 w-4" aria-hidden />
+              </Link>
+            </div>
+          ) : (
           <nav data-reveal aria-label={`${category.name} on this page`} className="self-start rounded-2xl bg-sand p-7">
             <p className="text-xs font-semibold tracking-[0.18em] text-gold-700 uppercase">On this page</p>
             <ol className="mt-4 space-y-1">
@@ -73,6 +94,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
               ))}
             </ol>
           </nav>
+          )}
         </div>
       </section>
 
@@ -176,7 +198,10 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
       )}
 
       <CtaBand
-        title={`Discuss a ${category.name.replace(/ Products$/, "").toLowerCase()} opportunity`}
+        title={(() => {
+          const topic = category.name.replace(/ Products$/, "").toLowerCase();
+          return `Discuss ${/^[aeiou]/.test(topic) ? "an" : "a"} ${topic} opportunity`;
+        })()}
         text="Share the product, grade, dimensions and target market. We'll outline how we would identify and qualify the right buyers or suppliers."
         settings={settings}
         primary={{ href: "/contact#consultation", label: "Book a Consultation" }}

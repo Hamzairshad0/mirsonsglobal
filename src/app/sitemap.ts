@@ -9,6 +9,7 @@ const PAGES: [string, number][] = [
   ["/industries", 0.9],
   ["/industries/stainless-steel", 0.9],
   ["/industries/copper", 0.9],
+  ["/industries/industrial-raw-materials", 0.8],
   ["/pilot", 0.8],
   ["/sample-report", 0.7],
   ["/how-it-works", 0.7],

@@ -5,6 +5,7 @@ import { getContent } from "@/lib/content";
 import { Icon } from "@/components/Icon";
 import { CheckList, CtaBand, delay, PageHero, SectionHeading } from "@/components/ui";
 import { Ornament } from "@/components/Graphics";
+import { FounderSection } from "@/components/Founder";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -37,7 +38,7 @@ const PRINCIPLES = [
 ];
 
 export default async function AboutPage() {
-  const settings = await getContent("settings");
+  const [settings, founder] = await Promise.all([getContent("settings"), getContent("founder")]);
   return (
     <>
       <PageHero
@@ -90,6 +91,10 @@ export default async function AboutPage() {
           </div>
         </div>
       </section>
+
+      <div className="border-t border-line">
+        <FounderSection founder={founder} />
+      </div>
 
       <section className="bg-grid bg-sand py-20 sm:py-28">
         <div className="container-x grid gap-6 md:grid-cols-3">

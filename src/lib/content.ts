@@ -48,7 +48,9 @@ export async function getProductOptions(): Promise<string[]> {
   const catalog = await getCatalog();
   return [
     ...catalog.flatMap((c) => c.products.map((p) => p.name)),
-    ...catalog.map((c) => `Other ${c.name.replace(/ Products$/, "").toLowerCase()} product`),
+    // Categories without listed products (e.g. Industrial Raw Materials) are offered as one option
+    ...catalog.filter((c) => c.products.length === 0).map((c) => c.name),
+    ...catalog.filter((c) => c.products.length > 0).map((c) => `Other ${c.name.replace(/ Products$/, "").toLowerCase()} product`),
     "Other",
   ];
 }

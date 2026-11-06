@@ -1,6 +1,7 @@
 import {
   categoriesDefault,
   industriesPageDefault,
+  founderDefault,
   offerDefault,
   pilotDefault,
   productsDefault,
@@ -50,6 +51,7 @@ export type Product = {
   active: boolean;
 };
 export type Offer = { receive: string; need: string };
+export type Founder = { name: string; title: string; role: string; quote: string; image: string; show: boolean };
 export type Pilot = { intro: string; inclusions: string; whoFor: string; timeline: string; pricing: string };
 export type SampleMeta = { title: string; client: string; product: string; markets: string; period: string; disclaimer: string };
 export type SampleRow = { company: string; country: string; website: string; fit: string; role: string; status: string; note: string };
@@ -66,6 +68,7 @@ export type ContentMap = {
   categories: Category[];
   products: Product[];
   offer: Offer;
+  founder: Founder;
   pilot: Pilot;
   sampleMeta: SampleMeta;
   sampleRows: SampleRow[];
@@ -89,11 +92,11 @@ export const defaults: ContentMap = {
     linkedin: "",
   },
   home: {
-    heroEyebrow: "B2B Lead Generation & Buyer–Supplier Matchmaking",
-    heroTitle: "Connecting Manufacturers with Qualified International Buyers",
+    heroEyebrow: "International buyer acquisition for manufacturers",
+    heroTitle: "We Help Manufacturers Find International Buyers",
     heroSubtitle:
-      "We identify importers, distributors and commercial buyers in your target markets — and turn them into qualified sales conversations and pre-arranged business meetings.",
-    heroNote: "Specialising in stainless steel and copper — for manufacturers, suppliers, importers and industrial buyers.",
+      "Mirsons Global researches importers, distributors and industrial buyers in your target markets, reaches the people who make purchasing decisions and arranges qualified meetings with your sales team.",
+    heroNote: "Specialising in stainless steel products, copper products and industrial raw materials.",
     ctaTitle: "Ready to Find Your Next Market?",
     ctaText:
       "Tell us what you manufacture, where you currently sell and which markets you want to enter. We will identify potential buyer segments and show you what an outbound campaign could look like.",
@@ -152,6 +155,7 @@ export const defaults: ContentMap = {
   categories: categoriesDefault,
   products: productsDefault,
   offer: offerDefault,
+  founder: founderDefault,
   pilot: pilotDefault,
   sampleMeta: sampleMetaDefault,
   sampleRows: sampleRowsDefault,
@@ -186,7 +190,7 @@ export const defaults: ContentMap = {
     {
       question: "Which industries do you work with?",
       answer:
-        "We focus on two industries where we can research buyers and suppliers in depth: stainless steel (sheets, coils, pipes and tubes, and plates) and copper (busbars, wire rods, tubes and pipes, and cathodes). Requests for related industrial products are assessed individually.",
+        "Our initial focus is three industries where we can research buyers and suppliers in depth: stainless steel products (coils, sheets, plates, pipes and tubes), copper products (busbars, wire rods, cathodes, tubes and pipes) and selected industrial raw materials. Other industrial products are assessed individually.",
     },
     {
       question: "How do you qualify a lead?",
@@ -214,7 +218,7 @@ export const defaults: ContentMap = {
     siteDescription:
       "Mirsons Global helps manufacturers and suppliers find qualified international buyers — importers, distributors, wholesalers and industrial purchasers — through targeted research, outreach and pre-arranged business meetings.",
     keywords:
-      "stainless steel buyers, copper buyers, stainless steel coils, copper busbars, copper cathodes, B2B lead generation, international buyers, find distributors, buyer supplier matchmaking, export sales pipeline",
+      "international buyers for manufacturers, stainless steel buyers, copper buyers, industrial raw materials, stainless steel coils, copper busbars, copper cathodes, B2B lead generation, international buyers, find distributors, buyer supplier matchmaking, export sales pipeline",
   },
 };
 
@@ -270,6 +274,20 @@ export const sections: SectionSpec[] = [
     ],
   },
   {
+    key: "founder",
+    title: "Founder",
+    description: "The “Meet the Founder” section on the About page and homepage.",
+    kind: "object",
+    fields: [
+      { name: "name", label: "Name", type: "text" },
+      { name: "title", label: "Title", type: "text" },
+      { name: "role", label: "Role / speciality", type: "text" },
+      { name: "quote", label: "Quote", type: "textarea" },
+      { name: "image", label: "Photo", type: "text", help: "e.g. /images/founder.webp" },
+      { name: "show", label: "Show on website", type: "boolean" },
+    ],
+  },
+  {
     key: "services",
     title: "Services",
     description: "Service cards on the homepage and the Our Services page.",
@@ -321,7 +339,7 @@ export const sections: SectionSpec[] = [
     titleField: "name",
     fields: [
       { name: "name", label: "Product name", type: "text" },
-      { name: "category", label: "Category", type: "select", options: ["stainless-steel", "copper"], help: "Must match a category's page address" },
+      { name: "category", label: "Category", type: "select", options: ["stainless-steel", "copper", "industrial-raw-materials"], help: "Must match a category's page address" },
       { name: "slug", label: "Anchor (url-friendly)", type: "text" },
       { name: "summary", label: "Short summary (cards)", type: "textarea" },
       { name: "overview", label: "Product overview", type: "textarea", help: "Leave a blank line between paragraphs" },
