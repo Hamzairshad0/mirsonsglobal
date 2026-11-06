@@ -48,7 +48,7 @@ export default async function AboutPage() {
         intro={`${settings.companyName} helps manufacturers and suppliers connect with relevant international buyers — through targeted research, qualified leads and pre-arranged business meetings.`}
       />
 
-      <section className="py-20 sm:py-28">
+      <section className="py-14 sm:py-20">
         <div className="container-x grid gap-14 lg:grid-cols-2 lg:gap-20">
           <div>
             <SectionHeading eyebrow="Who we are" title="We build B2B sales pipelines for industrial manufacturers" />
@@ -96,7 +96,7 @@ export default async function AboutPage() {
         <FounderSection founder={founder} />
       </div>
 
-      <section className="bg-grid bg-sand py-20 sm:py-28">
+      <section className="bg-grid bg-sand py-14 sm:py-20">
         <div className="container-x grid gap-6 md:grid-cols-3">
           <MissionCard
             index={0}
@@ -119,7 +119,7 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <section className="py-20 sm:py-28">
+      <section className="py-14 sm:py-20">
         <div className="container-x">
           <SectionHeading
             eyebrow="Our principles"
@@ -127,7 +127,7 @@ export default async function AboutPage() {
             intro="Every engagement follows the same standards, whether we are representing a manufacturer or sourcing for a buyer."
             center
           />
-          <ul className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {PRINCIPLES.map((p, i) => (
               <li key={p.title} data-reveal style={delay(i)} className="card lift p-7">
                 <Icon name={p.icon} className="h-7 w-7 text-gold-600" />
@@ -139,7 +139,7 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <section className="border-t border-line bg-white py-20 sm:py-24">
+      <section className="border-t border-line bg-white py-14 sm:py-18">
         <div className="container-x grid gap-12 lg:grid-cols-2 lg:gap-20">
           <SectionHeading
             eyebrow="How we are different"

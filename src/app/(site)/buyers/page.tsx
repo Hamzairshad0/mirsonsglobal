@@ -7,6 +7,7 @@ import { Icon } from "@/components/Icon";
 import { FormPanel } from "@/components/FormPanel";
 import { BuyerForm } from "@/components/forms/Forms";
 import Image from "next/image";
+import { Parallax } from "@/components/Parallax";
 import { CheckList, delay, NumberedSteps, PageHero, SectionHeading } from "@/components/ui";
 
 export const metadata: Metadata = {
@@ -39,14 +40,14 @@ export default async function BuyersPage() {
         </Link>
       </PageHero>
 
-      <section className="py-20 sm:py-28">
+      <section className="py-14 sm:py-20">
         <div className="container-x">
           <SectionHeading
             eyebrow="How we help buyers"
             title="Less searching. Better-matched suppliers."
             intro="Finding a dependable manufacturer abroad takes time. We do the research, screening and first conversations for you."
           />
-          <ul className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {HELP.map((h, i) => (
               <li key={h.title} data-reveal style={delay(i)} className="card lift group p-7">
                 <span className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-navy-900 text-gold-400 transition-colors duration-300 group-hover:bg-gold-500 group-hover:text-navy-950">
@@ -61,17 +62,19 @@ export default async function BuyersPage() {
       </section>
 
       <section className="on-dark relative isolate overflow-hidden bg-navy-900 py-20 text-white sm:py-28">
-        <Image src="/images/containers-aerial.webp" alt="" fill quality={50} sizes="100vw" className="-z-20 object-cover opacity-25" />
+        <Parallax speed={0.25}>
+          <Image src="/images/containers-aerial.webp" alt="" fill quality={50} sizes="100vw" className="object-cover opacity-25" />
+        </Parallax>
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-navy-900 via-navy-900/85 to-navy-900" aria-hidden />
         <div className="container-x">
           <SectionHeading eyebrow="The sourcing process" title="From requirement to supplier meeting" dark />
-          <div className="mt-14">
+          <div className="mt-10">
             <NumberedSteps steps={BUYER_PROCESS} dark />
           </div>
         </div>
       </section>
 
-      <section className="py-20 sm:py-24">
+      <section className="py-14 sm:py-18">
         <div className="container-x grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
           <div data-reveal className="photo-zoom relative order-last aspect-[4/3] overflow-hidden rounded-2xl shadow-2xl shadow-navy-900/20 lg:order-first">
             <Image

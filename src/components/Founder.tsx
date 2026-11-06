@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import type { Founder } from "@/lib/content-schema";
 import { Ornament } from "./Graphics";
+import { Parallax } from "./Parallax";
 
 function QuoteMark({ className = "" }: { className?: string }) {
   return (
@@ -16,7 +17,7 @@ function QuoteMark({ className = "" }: { className?: string }) {
 export function FounderSection({ founder }: { founder: Founder }) {
   if (!founder.show) return null;
   return (
-    <section id="founder" className="relative overflow-hidden bg-white py-20 sm:py-28">
+    <section id="founder" className="relative overflow-hidden bg-white py-14 sm:py-20">
       <div className="container-x grid items-center gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
         <div data-reveal className="relative mx-auto w-full max-w-md lg:mx-0">
           <div className="absolute -top-4 -left-4 h-full w-full rounded-2xl border-2 border-gold-500/60" aria-hidden />
@@ -64,31 +65,68 @@ export function FounderSection({ founder }: { founder: Founder }) {
   );
 }
 
-/** Compact founder quote band (homepage). */
+/** Founder feature for the homepage: portrait, quote and commitments over a parallax background. */
 export function FounderQuote({ founder }: { founder: Founder }) {
   if (!founder.show) return null;
+  const first = founder.name.split(" ")[0];
+  const commitments = ["Research-driven buyer acquisition", "Professional outreach", "Reliable business introductions"];
   return (
-    <section className="on-dark relative overflow-hidden bg-navy-900 py-16 text-white sm:py-20">
-      <div className="container-x relative grid items-center gap-10 md:grid-cols-[auto_1fr]">
-        <div data-reveal className="relative mx-auto h-40 w-40 shrink-0 md:mx-0 md:h-48 md:w-48">
-          <span className="absolute -inset-2 rounded-full border border-gold-500/50" aria-hidden />
-          <div className="relative h-full w-full overflow-hidden rounded-full ring-4 ring-navy-800">
-            <Image src="/images/founder-square.webp" alt={founder.name} fill quality={75} sizes="12rem" className="object-cover" />
+    <section className="on-dark relative isolate overflow-hidden bg-navy-950 py-16 text-white sm:py-20">
+      <Parallax speed={0.18}>
+        <Image src="/images/port-cranes-night.webp" alt="" fill quality={50} sizes="100vw" className="object-cover opacity-20" />
+      </Parallax>
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-navy-950 via-navy-950/90 to-navy-950/70" aria-hidden />
+      <div className="absolute top-1/2 left-[18%] -z-10 h-[28rem] w-[28rem] -translate-y-1/2 rounded-full bg-gold-500/10 blur-3xl" aria-hidden />
+
+      <div className="container-x grid items-center gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+        <div data-reveal className="relative mx-auto w-full max-w-sm lg:mx-0">
+          <span className="absolute -top-4 -left-4 h-full w-full rounded-2xl border border-gold-500/60" aria-hidden />
+          <span className="absolute -right-4 -bottom-4 h-24 w-24 rounded-br-2xl border-r-2 border-b-2 border-gold-500" aria-hidden />
+          <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-navy-800 shadow-2xl shadow-black/40">
+            <Image
+              src={founder.image || "/images/founder.webp"}
+              alt={`${founder.name}, ${founder.title}`}
+              fill
+              quality={75}
+              sizes="(min-width: 1024px) 24rem, 90vw"
+              className="object-cover object-top"
+            />
+            <span className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-navy-950/90 via-navy-950/30 to-transparent" aria-hidden />
+            <span className="absolute inset-x-6 bottom-6">
+              <span className="block font-serif text-2xl font-semibold">{founder.name}</span>
+              <span className="mt-1 block text-xs tracking-[0.16em] text-gold-400 uppercase">{founder.title}</span>
+            </span>
           </div>
         </div>
-        <figure data-reveal className="text-center md:text-left">
-          <QuoteMark className="mx-auto h-7 w-10 text-gold-500/60 md:mx-0" />
-          <blockquote className="mt-4 max-w-3xl font-serif text-xl leading-snug sm:text-2xl">“{founder.quote}”</blockquote>
-          <figcaption className="mt-5">
-            <span className="block font-semibold text-gold-300">{founder.name}</span>
-            <span className="text-sm text-white/60">
-              {founder.title} · {founder.role}
-            </span>
-          </figcaption>
-          <Link href="/about#founder" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-gold-400 hover:text-gold-300">
-            Meet the founder <ArrowRight className="h-4 w-4" aria-hidden />
-          </Link>
-        </figure>
+
+        <div data-reveal>
+          <p className="eyebrow">A word from our founder</p>
+          <QuoteMark className="mt-8 h-10 w-14 text-gold-500" />
+          <blockquote className="mt-6 font-serif text-2xl leading-snug sm:text-3xl lg:text-[2.1rem] lg:leading-[1.25]">{founder.quote}</blockquote>
+          <div className="mt-8 flex items-center gap-4">
+            <span className="h-px w-12 bg-gold-500" aria-hidden />
+            <p>
+              <span className="font-semibold text-gold-300">{founder.name}</span>
+              <span className="text-white/60"> · {founder.role}</span>
+            </p>
+          </div>
+          <ul className="mt-8 grid gap-3 sm:grid-cols-3">
+            {commitments.map((c) => (
+              <li key={c} className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/85 backdrop-blur-sm">
+                <span className="mb-1.5 block h-0.5 w-6 bg-gold-500" aria-hidden />
+                {c}
+              </li>
+            ))}
+          </ul>
+          <div className="mt-9 flex flex-wrap gap-4">
+            <Link href="/contact#consultation" className="btn-gold">
+              Speak with {first} <ArrowRight className="h-4 w-4" aria-hidden />
+            </Link>
+            <Link href="/about#founder" className="btn-outline-light">
+              Meet the founder
+            </Link>
+          </div>
+        </div>
       </div>
     </section>
   );

@@ -49,7 +49,7 @@ export function OfferSection({ offer, id = "offer" }: { offer: Offer; id?: strin
     },
   ];
   return (
-    <section id={id} className="py-20 sm:py-28">
+    <section id={id} className="py-14 sm:py-20">
       <div className="container-x">
         <div data-reveal className="max-w-3xl">
           <p className="eyebrow">For manufacturers & suppliers</p>
@@ -58,7 +58,7 @@ export function OfferSection({ offer, id = "offer" }: { offer: Offer; id?: strin
             Before any outreach starts, both sides know what will be delivered and what information is required.
           </p>
         </div>
-        <div className="mt-14 grid gap-6 lg:grid-cols-2">
+        <div className="mt-10 grid gap-6 lg:grid-cols-2">
           {blocks.map((b, i) => (
             <div
               key={b.title}

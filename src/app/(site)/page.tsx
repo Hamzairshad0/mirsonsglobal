@@ -5,6 +5,7 @@ import { getCatalog, getContent } from "@/lib/content";
 import { categoryImage } from "@/lib/content-schema";
 import { OfferSection, productHref } from "@/components/Catalog";
 import { FounderQuote } from "@/components/Founder";
+import { Parallax } from "@/components/Parallax";
 import { MANUFACTURER_PROCESS } from "@/lib/process";
 import { Icon } from "@/components/Icon";
 import { MatchmakingDiagram, Marquee, Ornament } from "@/components/Graphics";
@@ -84,15 +85,17 @@ export default async function HomePage() {
     <>
       {/* Hero */}
       <section className="on-dark relative isolate flex min-h-[92svh] items-center overflow-hidden bg-navy-950 pt-36 pb-20 text-white">
-        <Image
-          src="/images/hero-port.webp"
-          alt=""
-          fill
-          priority
-          quality={60}
-          sizes="100vw"
-          className="ken-burns -z-20 object-cover object-[70%_center]"
-        />
+        <Parallax speed={0.3}>
+          <Image
+            src="/images/hero-port.webp"
+            alt=""
+            fill
+            priority
+            quality={60}
+            sizes="100vw"
+            className="ken-burns object-cover object-[70%_center]"
+          />
+        </Parallax>
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-navy-950 via-navy-950/88 to-navy-950/35" aria-hidden />
         <WorldMap className="absolute top-1/2 left-1/2 -z-10 w-[190%] max-w-none -translate-x-[38%] -translate-y-1/2 opacity-75 sm:w-[130%] lg:w-[105%] lg:-translate-x-[42%]" />
         <div className="absolute inset-x-0 bottom-0 -z-10 h-48 bg-gradient-to-t from-navy-950 to-transparent" aria-hidden />
@@ -150,7 +153,7 @@ export default async function HomePage() {
       </section>
 
       {/* The manufacturer's problem */}
-      <section className="py-20 sm:py-28">
+      <section className="py-14 sm:py-20">
         <div className="container-x grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
           <div>
             <SectionHeading
@@ -178,16 +181,16 @@ export default async function HomePage() {
               </Link>
             </div>
           </div>
-          <div data-reveal className="relative pb-20 sm:pr-14">
+          <div data-reveal className="relative pb-14 sm:pr-14">
             <div className="photo-zoom relative aspect-[4/5] overflow-hidden rounded-2xl shadow-2xl shadow-navy-900/20 sm:aspect-[4/4.4]">
               <Image src="/images/steel-mill.webp" alt="Steel production inside a factory" fill quality={62} sizes="(min-width: 1024px) 42vw, 90vw" className="object-cover" />
             </div>
-            <div className="absolute right-0 bottom-0 w-[55%] overflow-hidden rounded-xl border-4 border-ivory shadow-xl shadow-navy-900/25">
+            <div data-parallax="-0.12" className="absolute right-0 bottom-0 w-[55%] overflow-hidden rounded-xl border-4 border-ivory shadow-xl shadow-navy-900/25">
               <div className="relative aspect-[4/3]">
                 <Image src="/images/products/ss-coils.webp" alt="Stainless steel coils ready for export" fill quality={60} sizes="(min-width: 1024px) 22vw, 50vw" className="object-cover" />
               </div>
             </div>
-            <div className="absolute top-6 -left-3 rounded-lg bg-navy-900 px-5 py-4 text-white shadow-xl sm:-left-6">
+            <div data-parallax="0.1" className="absolute top-6 -left-3 rounded-lg bg-navy-900 px-5 py-4 text-white shadow-xl sm:-left-6">
               <p className="text-xs tracking-[0.18em] text-gold-400 uppercase">Our objective</p>
               <p className="mt-1 font-serif text-lg">More buyer conversations for your factory</p>
             </div>
@@ -195,13 +198,15 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <FounderQuote founder={founder} />
+
       {/* Concrete offer */}
       <div className="border-t border-line bg-white">
         <OfferSection offer={offer} />
       </div>
 
       {/* Sample deliverable preview */}
-      <section className="bg-grid border-y border-line bg-sand py-20 sm:py-28">
+      <section className="bg-grid border-y border-line bg-sand py-14 sm:py-20">
         <div className="container-x grid items-center gap-14 lg:grid-cols-[1fr_1.25fr] lg:gap-20">
           <div>
             <SectionHeading
@@ -257,7 +262,9 @@ export default async function HomePage() {
 
       {/* Process */}
       <section className="on-dark relative isolate overflow-hidden bg-navy-900 py-20 text-white sm:py-28">
-        <Image src="/images/containers-aerial.webp" alt="" fill quality={50} sizes="100vw" className="-z-20 object-cover opacity-25" />
+        <Parallax speed={0.25}>
+          <Image src="/images/containers-aerial.webp" alt="" fill quality={50} sizes="100vw" className="object-cover opacity-30" />
+        </Parallax>
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-navy-900 via-navy-900/85 to-navy-900" aria-hidden />
         <div className="container-x relative">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
@@ -271,17 +278,17 @@ export default async function HomePage() {
               How it works <ArrowRight className="h-4 w-4" aria-hidden />
             </Link>
           </div>
-          <div data-reveal className="mx-auto mt-14 hidden max-w-4xl sm:block">
+          <div data-reveal className="mx-auto mt-10 hidden max-w-4xl sm:block">
             <MatchmakingDiagram className="mx-auto h-auto w-full" />
           </div>
-          <div className="mt-14">
+          <div className="mt-10">
             <NumberedSteps steps={MANUFACTURER_PROCESS} dark />
           </div>
         </div>
       </section>
 
       {/* Initial industrial focus */}
-      <section className="py-20 sm:py-28">
+      <section className="py-14 sm:py-20">
         <div className="container-x">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <SectionHeading
@@ -293,7 +300,7 @@ export default async function HomePage() {
               Industries & products <ArrowRight className="h-4 w-4" aria-hidden />
             </Link>
           </div>
-          <div className="mt-14 grid gap-6 lg:grid-cols-3">
+          <div className="mt-10 grid gap-6 lg:grid-cols-3">
             {catalog.map((c, i) => (
               <div key={c.slug} data-reveal style={delay(i, 120)} className="photo-zoom group relative overflow-hidden rounded-2xl bg-navy-900 text-white">
                 <Image src={categoryImage(c)} alt="" fill quality={55} sizes="(min-width: 1024px) 33vw, 100vw" className="object-cover opacity-45" />
@@ -332,7 +339,7 @@ export default async function HomePage() {
       </section>
 
       {/* Buyers we find */}
-      <section className="bg-grid relative bg-sand py-20 sm:py-28">
+      <section className="bg-grid relative bg-sand py-14 sm:py-20">
         <div className="container-x">
           <SectionHeading
             eyebrow="Who we find for you"
@@ -340,7 +347,7 @@ export default async function HomePage() {
             intro="We identify the companies capable of purchasing, importing and distributing your products — then the decision-makers inside them."
             center
           />
-          <ul className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {buyerTypes.map((b, i) => (
               <li key={b.title} data-reveal style={delay(i, 60)} className="card lift group p-7 hover:border-gold-500/60">
                 <span className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-navy-900 text-gold-400 transition-colors duration-300 group-hover:bg-gold-500 group-hover:text-navy-950">
@@ -362,7 +369,7 @@ export default async function HomePage() {
       </section>
 
       {/* Services for manufacturers */}
-      <section className="py-20 sm:py-28">
+      <section className="py-14 sm:py-20">
         <div className="container-x">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <SectionHeading
@@ -374,7 +381,7 @@ export default async function HomePage() {
               All services <ArrowRight className="h-4 w-4" aria-hidden />
             </Link>
           </div>
-          <ul className="mt-14 grid gap-px overflow-hidden rounded-xl bg-line ring-1 ring-line sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="mt-10 grid gap-px overflow-hidden rounded-xl bg-line ring-1 ring-line sm:grid-cols-2 lg:grid-cols-3">
             {makerServices.map((s, i) => (
               <li key={s.slug} data-reveal="fade" style={delay(i, 70)} className="group relative bg-white p-8 transition-colors duration-300 hover:bg-ivory">
                 <span className="absolute inset-x-0 top-0 h-0.5 origin-left scale-x-0 bg-gold-500 transition-transform duration-500 group-hover:scale-x-100" aria-hidden />
@@ -406,10 +413,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <FounderQuote founder={founder} />
-
       {/* Why Mirsons */}
-      <section className="relative overflow-hidden bg-sand py-20 sm:py-28">
+      <section className="relative overflow-hidden bg-sand py-14 sm:py-20">
         <Image
           src="/brand/watermark.png"
           alt=""
@@ -423,7 +428,7 @@ export default async function HomePage() {
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-2xl shadow-navy-900/20">
               <Image src="/images/handshake.webp" alt="Two business partners shaking hands" fill quality={62} sizes="(min-width: 1024px) 40vw, 90vw" className="object-cover" />
             </div>
-            <div className="absolute right-0 bottom-0 w-1/2 overflow-hidden rounded-xl border-4 border-sand shadow-xl shadow-navy-900/20">
+            <div data-parallax="-0.12" className="absolute right-0 bottom-0 w-1/2 overflow-hidden rounded-xl border-4 border-sand shadow-xl shadow-navy-900/20">
               <div className="relative aspect-[4/3]">
                 <Image src="/images/video-call.webp" alt="International video meeting on a laptop" fill quality={60} sizes="(min-width: 1024px) 20vw, 45vw" className="object-cover" />
               </div>
@@ -450,7 +455,7 @@ export default async function HomePage() {
       </section>
 
       {/* FAQ */}
-      <section className="py-20 sm:py-28">
+      <section className="py-14 sm:py-20">
         <div className="container-x grid gap-12 lg:grid-cols-[1fr_1.6fr] lg:gap-20">
           <div>
             <SectionHeading eyebrow="FAQs" title="Questions manufacturers often ask" />

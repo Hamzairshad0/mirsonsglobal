@@ -39,7 +39,7 @@ export default async function PilotPage() {
       </PageHero>
 
       {/* What the pilot includes */}
-      <section className="py-20 sm:py-28">
+      <section className="py-14 sm:py-20">
         <div className="container-x grid gap-14 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
           <div>
             <SectionHeading
@@ -71,7 +71,7 @@ export default async function PilotPage() {
             intro="Timings are indicative and confirmed in your proposal."
             dark
           />
-          <ol className="mt-14 grid gap-px overflow-hidden rounded-xl bg-white/10 md:grid-cols-2 lg:grid-cols-4">
+          <ol className="mt-10 grid gap-px overflow-hidden rounded-xl bg-white/10 md:grid-cols-2 lg:grid-cols-4">
             {timeline.map((t, i) => (
               <li key={i} data-reveal="fade" style={delay(i, 90)} className="bg-navy-900 p-8">
                 <CalendarRange className="h-6 w-6 text-gold-400" strokeWidth={1.5} aria-hidden />
@@ -84,7 +84,7 @@ export default async function PilotPage() {
       </section>
 
       {/* Who it's for + pricing */}
-      <section className="py-20 sm:py-28">
+      <section className="py-14 sm:py-20">
         <div className="container-x grid gap-6 lg:grid-cols-3">
           <div data-reveal className="card p-8 sm:p-10 lg:col-span-2">
             <BadgeCheck className="h-7 w-7 text-gold-600" strokeWidth={1.5} aria-hidden />

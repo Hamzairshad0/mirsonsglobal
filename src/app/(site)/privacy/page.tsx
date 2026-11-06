@@ -13,7 +13,7 @@ export default async function PrivacyPage() {
   return (
     <>
       <PageHero eyebrow="Legal" title="Privacy Policy" intro="Last updated: October 2026" />
-      <section className="py-16 sm:py-20">
+      <section className="py-12 sm:py-16">
         <article className="container-x prose-legal max-w-3xl">
           <p>
             This policy explains how {s.companyName} (&ldquo;we&rdquo;, &ldquo;us&rdquo;) collects and uses information when you

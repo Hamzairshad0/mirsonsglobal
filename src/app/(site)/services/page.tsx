@@ -49,7 +49,7 @@ export default async function ServicesPage() {
         </Link>
       </PageHero>
 
-      <section className="py-20 sm:py-28">
+      <section className="py-14 sm:py-20">
         <div className="container-x space-y-6">
           {services.map((s, i) => (
             <article
@@ -75,7 +75,7 @@ export default async function ServicesPage() {
         </div>
       </section>
 
-      <section className="bg-grid bg-sand py-20 sm:py-28">
+      <section className="bg-grid bg-sand py-14 sm:py-20">
         <div className="container-x">
           <SectionHeading
             eyebrow="Ways to work with us"
@@ -83,7 +83,7 @@ export default async function ServicesPage() {
             intro="Every engagement is scoped to your products, markets and goals. We'll recommend the right starting point in your consultation."
             center
           />
-          <div className="mt-14 grid gap-6 lg:grid-cols-3">
+          <div className="mt-10 grid gap-6 lg:grid-cols-3">
             {ENGAGEMENTS.map((e, i) => (
               <div
                 key={e.name}
@@ -117,7 +117,7 @@ export default async function ServicesPage() {
         </div>
       </section>
 
-      <section className="py-20 sm:py-28">
+      <section className="py-14 sm:py-20">
         <div className="container-x grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
           <div>
             <SectionHeading

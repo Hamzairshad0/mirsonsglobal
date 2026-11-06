@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { getContent, getProductOptions } from "@/lib/content";
 import { OfferSection } from "@/components/Catalog";
+import { Parallax } from "@/components/Parallax";
 import { MANUFACTURER_PROCESS } from "@/lib/process";
 import { Icon } from "@/components/Icon";
 import { FormPanel } from "@/components/FormPanel";
@@ -56,14 +57,14 @@ export default async function ManufacturersPage() {
         </Link>
       </PageHero>
 
-      <section className="py-20 sm:py-28">
+      <section className="py-14 sm:py-20">
         <div className="container-x">
           <SectionHeading
             eyebrow="The challenge"
             title="Stop waiting for distributors to find you"
             intro="Your products may already have demand in international markets. The problem is finding the companies actually capable of buying, importing, distributing or selling them."
           />
-          <ul className="mt-14 grid gap-6 md:grid-cols-3">
+          <ul className="mt-10 grid gap-6 md:grid-cols-3">
             {PAINS.map((p, i) => (
               <li key={p.title} data-reveal style={delay(i, 120)} className="border-t-2 border-gold-500 pt-6">
                 <h3 className="text-xl font-semibold text-navy-900">{p.title}</h3>
@@ -75,7 +76,9 @@ export default async function ManufacturersPage() {
       </section>
 
       <section className="on-dark relative isolate overflow-hidden bg-navy-900 py-20 text-white sm:py-28">
-        <Image src="/images/factory-interior.webp" alt="" fill quality={50} sizes="100vw" className="-z-20 object-cover opacity-30" />
+        <Parallax speed={0.25}>
+          <Image src="/images/factory-interior.webp" alt="" fill quality={50} sizes="100vw" className="object-cover opacity-30" />
+        </Parallax>
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-navy-900 via-navy-900/90 to-navy-900/75" aria-hidden />
         <div className="container-x grid gap-14 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
           <SectionHeading
@@ -103,10 +106,10 @@ export default async function ManufacturersPage() {
         </div>
       </section>
 
-      <section className="py-20 sm:py-28">
+      <section className="py-14 sm:py-20">
         <div className="container-x">
           <SectionHeading eyebrow="Our process" title="Six steps from target market to booked meeting" />
-          <div className="mt-14">
+          <div className="mt-10">
             <NumberedSteps steps={MANUFACTURER_PROCESS} />
           </div>
         </div>

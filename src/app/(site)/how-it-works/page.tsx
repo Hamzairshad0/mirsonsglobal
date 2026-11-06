@@ -75,7 +75,7 @@ export default async function HowItWorksPage() {
         </div>
       </section>
 
-      <section className="py-20 sm:py-28">
+      <section className="py-14 sm:py-20">
         <div className="container-x grid gap-16 lg:grid-cols-2 lg:gap-20">
           <div>
             <SectionHeading eyebrow="For manufacturers & suppliers" title="Finding your buyers" />
@@ -98,7 +98,7 @@ export default async function HowItWorksPage() {
         </div>
       </section>
 
-      <section className="bg-grid bg-sand py-20 sm:py-28">
+      <section className="bg-grid bg-sand py-14 sm:py-20">
         <div className="container-x grid gap-12 lg:grid-cols-[1fr_1.6fr] lg:gap-20">
           <SectionHeading
             eyebrow="After you submit"
@@ -122,7 +122,7 @@ export default async function HowItWorksPage() {
         </div>
       </section>
 
-      <section className="py-20 sm:py-28">
+      <section className="py-14 sm:py-20">
         <div className="container-x grid gap-12 lg:grid-cols-[1fr_1.6fr] lg:gap-20">
           <SectionHeading eyebrow="FAQs" title="Common questions" />
           <FaqList faqs={faqs} />

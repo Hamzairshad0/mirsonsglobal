@@ -68,7 +68,7 @@ export default async function SampleReportPage() {
         </Link>
       </PageHero>
 
-      <section className="bg-sand py-16 sm:py-20 print:bg-white print:py-0">
+      <section className="bg-sand py-12 sm:py-16 print:bg-white print:py-0">
         <div className="container-x">
           <div className="no-print mb-6 flex flex-wrap items-center justify-between gap-4">
             <p className="flex items-center gap-2 text-sm text-muted">
@@ -205,7 +205,7 @@ export default async function SampleReportPage() {
         </div>
       </section>
 
-      <section className="no-print py-20 sm:py-24">
+      <section className="no-print py-14 sm:py-18">
         <div className="container-x grid gap-12 lg:grid-cols-2 lg:gap-20">
           <SectionHeading
             eyebrow="In a full report"

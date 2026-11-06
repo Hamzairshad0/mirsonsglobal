@@ -42,7 +42,7 @@ export default async function IndustriesPage() {
         </Link>
       </PageHero>
 
-      <section className="py-20 sm:py-28">
+      <section className="py-14 sm:py-20">
         <div className="container-x grid gap-12 lg:grid-cols-[1.3fr_1fr] lg:gap-20">
           <div data-reveal className="space-y-5 text-[17px] leading-relaxed text-muted">
             {intro.map((p, i) => (
@@ -76,14 +76,14 @@ export default async function IndustriesPage() {
         </div>
       </section>
 
-      <section id="products" className="bg-grid border-y border-line bg-sand py-20 sm:py-28">
+      <section id="products" className="bg-grid border-y border-line bg-sand py-14 sm:py-20">
         <div className="container-x">
           <SectionHeading
             eyebrow="Priority industries & products"
             title="The exact product categories we support"
             intro="Our initial focus is three industries where we can research suppliers and buyers in depth, rather than covering many unrelated markets."
           />
-          <div className="mt-16 space-y-20">
+          <div className="mt-12 space-y-20">
             {catalog.map((c, ci) => (
               <div key={c.slug}>
                 <div data-reveal className="flex flex-col gap-4 border-b border-line pb-6 sm:flex-row sm:items-end sm:justify-between">
@@ -127,14 +127,14 @@ export default async function IndustriesPage() {
         </div>
       </section>
 
-      <section className="py-20 sm:py-28">
+      <section className="py-14 sm:py-20">
         <div className="container-x">
           <SectionHeading
             eyebrow="How we support these industries"
             title="Research and introductions built around your product specification"
             center
           />
-          <ul className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {SUPPORT.map((s, i) => (
               <li key={s.title} data-reveal style={delay(i)} className="card lift group p-7">
                 <span className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-navy-900 text-gold-400 transition-colors duration-300 group-hover:bg-gold-500 group-hover:text-navy-950">
@@ -157,7 +157,7 @@ export default async function IndustriesPage() {
             intro="We research and reach companies across established and emerging trade regions."
             dark
           />
-          <ul className="mt-14 grid gap-px overflow-hidden rounded-xl bg-white/10 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="mt-10 grid gap-px overflow-hidden rounded-xl bg-white/10 sm:grid-cols-2 lg:grid-cols-3">
             {markets.map((m, i) => (
               <li
                 key={m.name}

@@ -21,7 +21,7 @@ export function FormPanel({
   children: React.ReactNode;
 }) {
   return (
-    <section id={id} className="bg-sand py-20 sm:py-28">
+    <section id={id} className="bg-sand py-14 sm:py-20">
       <div className="container-x grid gap-10 lg:grid-cols-[1.7fr_1fr] lg:gap-14">
         <div className="card p-6 sm:p-10">
           <p className="eyebrow">{eyebrow}</p>

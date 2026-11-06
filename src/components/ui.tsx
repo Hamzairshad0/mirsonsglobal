@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, Check, Plus } from "lucide-react";
 import type { Faq, Settings } from "@/lib/content-schema";
 import { whatsappLink } from "@/lib/site";
+import { Parallax } from "./Parallax";
 
 export function WorldMap({ className = "" }: { className?: string }) {
   return (
@@ -30,7 +31,9 @@ export function PageHero({
       {image && (
         <div className="absolute inset-y-0 right-0 -z-10 w-full lg:w-[62%]" aria-hidden>
           {/* On phones the photo sits under a ~90% overlay, so a half-resolution copy is enough (smaller LCP download) */}
-          <Image src={image} alt="" fill priority quality={55} sizes="(min-width: 1024px) 62vw, 50vw" className="ken-burns object-cover" />
+          <Parallax speed={0.3} className="">
+            <Image src={image} alt="" fill priority quality={55} sizes="(min-width: 1024px) 62vw, 50vw" className="ken-burns object-cover" />
+          </Parallax>
         </div>
       )}
       <div
@@ -136,7 +139,9 @@ export function CtaBand({
 }) {
   return (
     <section className="on-dark relative isolate overflow-hidden bg-navy-900 py-20 text-white sm:py-28">
-      <Image src={image} alt="" aria-hidden fill quality={55} sizes="100vw" className="-z-10 object-cover" />
+      <Parallax speed={0.25} className="-z-10">
+        <Image src={image} alt="" fill quality={55} sizes="100vw" className="object-cover" />
+      </Parallax>
       <div className="absolute inset-0 -z-10 bg-gradient-to-r from-navy-950 via-navy-950/90 to-navy-900/60" aria-hidden />
       <Image
         src="/brand/watermark.png"

@@ -45,7 +45,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
       </PageHero>
 
       {/* Intro + jump links */}
-      <section className="border-b border-line bg-white py-16 sm:py-20">
+      <section className="border-b border-line bg-white py-12 sm:py-16">
         <div className="container-x grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:gap-16">
           <div data-reveal className="space-y-5 text-[17px] leading-relaxed text-muted">
             <h2 className="text-3xl font-semibold text-navy-900 sm:text-4xl">
@@ -102,7 +102,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
       {category.products.map((p, i) => {
         const flip = i % 2 === 1;
         return (
-          <section key={p.slug} id={p.slug} className={`py-20 sm:py-24 ${flip ? "bg-sand" : ""}`}>
+          <section key={p.slug} id={p.slug} className={`py-14 sm:py-18 ${flip ? "bg-sand" : ""}`}>
             <div className="container-x">
               <div className={`grid items-start gap-10 lg:grid-cols-2 lg:gap-16 ${flip ? "lg:[&>*:first-child]:order-last" : ""}`}>
                 <div data-reveal className="lg:sticky lg:top-28">
