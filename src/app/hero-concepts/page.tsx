@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ActiveSections } from "./ActiveSections";
 
 // Internal preview of five alternative homepage heroes. Not linked anywhere, not in the sitemap, noindex.
 export const metadata: Metadata = {
@@ -13,12 +14,12 @@ const GRAIN =
   "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
 
 const CSS = `
+[data-hc] { content-visibility: auto; contain-intrinsic-size: auto 100svh; }
+[data-hc]:not([data-active]) *, [data-hc]:not([data-active]) *::before, [data-hc]:not([data-active]) *::after { animation-play-state: paused !important; }
 @keyframes hc-spin { to { transform: rotate(360deg); } }
 @keyframes hc-ping { 0% { transform: scale(1); opacity: .8 } 100% { transform: scale(2.4); opacity: 0 } }
-@keyframes hc-shimmer { to { background-position: 200% center; } }
 @keyframes hc-draw { 0% { stroke-dashoffset: 1; opacity: 0 } 8% { opacity: 1 } 55% { stroke-dashoffset: 0; opacity: 1 } 85%, 100% { stroke-dashoffset: 0; opacity: 0 } }
 @keyframes hc-land { 0%, 50% { opacity: 0; transform: scale(.4) } 58% { opacity: 1; transform: scale(1.3) } 66%, 80% { opacity: 1; transform: scale(1) } 92%, 100% { opacity: 0 } }
-@keyframes hc-turn { to { background-position: 540px 0; } }
 @keyframes hc-row { to { transform: translateX(-50%); } }
 @keyframes hc-blob { 0% { transform: translate(0,0) scale(1) } 50% { transform: translate(-9%,7%) scale(1.18) } 100% { transform: translate(5%,-5%) scale(.92) } }
 @keyframes hc-sheen { from { background-position: 160% 0, 0 0; } to { background-position: -60% 0, 0 0; } }
@@ -30,11 +31,10 @@ const CSS = `
 .hc-ping { animation: hc-ping 2s ease-out infinite; }
 .hc-gold-text {
   background: linear-gradient(100deg, #ad8942 0%, #f0e2bf 25%, #c9a45c 50%, #f0e2bf 75%, #ad8942 100%);
-  background-size: 200% auto; -webkit-background-clip: text; background-clip: text; color: transparent;
-  animation: hc-shimmer 8s linear infinite;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
 }
-.hc-grain { background-image: ${GRAIN}; opacity: .07; mix-blend-mode: overlay; }
-.hc-glass { background: linear-gradient(160deg, rgb(255 255 255 / .10), rgb(255 255 255 / .03)); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+.hc-grain { background-image: ${GRAIN}; opacity: .05; }
+.hc-glass { background: linear-gradient(160deg, rgb(28 44 68 / .92), rgb(10 22 38 / .88)); }
 
 /* 01 Horizon */
 .hc-planet {
@@ -46,7 +46,6 @@ const CSS = `
   background-size: 18px 18px;
   -webkit-mask-image: radial-gradient(circle at 50% 0%, #000 0%, transparent 34%);
   mask-image: radial-gradient(circle at 50% 0%, #000 0%, transparent 34%);
-  animation: hc-turn 40s linear infinite;
 }
 .hc-draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: hc-draw 7s ease-in-out infinite; animation-delay: var(--d); }
 .hc-land { transform-box: fill-box; transform-origin: center; opacity: 0; animation: hc-land 7s ease-out infinite; animation-delay: var(--d); }
@@ -63,7 +62,7 @@ const CSS = `
 
 /* 03 Arch */
 .hc-outline { -webkit-text-stroke: 1px rgb(173 137 66 / .45); color: transparent; }
-.hc-row { animation: hc-row 70s linear infinite; }
+.hc-row { animation: hc-row 70s linear infinite; will-change: transform; }
 .hc-row-rev { animation-direction: reverse; animation-duration: 90s; }
 
 /* 04 Liquid metal */
@@ -102,8 +101,8 @@ function Nav({ light = false }: { light?: boolean }) {
       <div className="container-x flex h-24 items-center justify-between gap-6">
         <Image src="/brand/logo-header.png" alt="Mirsons Global" width={480} height={389} className="h-14 w-auto" />
         <ul
-          className={`hidden items-center gap-1 rounded-full border p-1.5 text-[13px] font-medium backdrop-blur-md xl:flex ${
-            light ? "border-navy-900/10 bg-white/60 text-navy-900/75" : "border-white/10 bg-white/[0.04] text-white/75"
+          className={`hidden items-center gap-1 rounded-full border p-1.5 text-[13px] font-medium xl:flex ${
+            light ? "border-navy-900/10 bg-white/85 text-navy-900/75" : "border-white/10 bg-navy-900/70 text-white/75"
           }`}
         >
           {LINKS.map((l, i) => (
@@ -136,7 +135,7 @@ function Ctas({ light = false, center = false, stack = false }: { light?: boolea
       <Link href="/manufacturers#inquiry" className={light ? "btn-navy" : "btn-gold"}>
         Find Buyers for Your Products <ArrowRight className="h-4 w-4" aria-hidden />
       </Link>
-      <Link href="/pilot" className={light ? "btn-outline" : "btn-outline-light backdrop-blur-sm"}>
+      <Link href="/pilot" className={light ? "btn-outline" : "btn-outline-light"}>
         See the Pilot Programme
       </Link>
     </div>
@@ -174,7 +173,7 @@ const STARS = Array.from({ length: 80 }, (_, i) => {
 function Horizon() {
   const [ox, oy] = onPlanet(ORIGIN);
   return (
-    <section id="concept-1" className="relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-[#03080f] text-white">
+    <section data-hc id="concept-1" className="relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-[#03080f] text-white">
       <Nav />
       <span className="absolute top-0 left-0 -z-20 h-px w-px" style={{ boxShadow: STARS }} aria-hidden />
 
@@ -183,7 +182,7 @@ function Horizon() {
         aria-hidden
       >
         <div className="hc-planet-dots absolute inset-0 rounded-full" />
-        <svg viewBox="-1000 -1000 2000 2000" className="absolute inset-0 h-full w-full overflow-visible">
+        <svg viewBox="-1000 -1250 2000 450" className="absolute top-[-12.5%] left-0 h-[22.5%] w-full overflow-visible will-change-transform">
           <defs>
             <linearGradient id="hc-route">
               <stop offset="0" stopColor="#c9a45c" stopOpacity="0.15" />
@@ -210,7 +209,7 @@ function Horizon() {
       </div>
 
       <div className="container-x relative z-10 flex flex-1 flex-col items-center justify-center pt-28 pb-[34vh] text-center sm:pb-[42vh]">
-        <p className="rise inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-xs text-white/75 backdrop-blur">
+        <p className="rise inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-xs text-white/75">
           <span className="relative flex h-2 w-2">
             <span className="hc-ping absolute inline-flex h-full w-full rounded-full bg-gold-400" />
             <span className="relative h-2 w-2 rounded-full bg-gold-400" />
@@ -253,7 +252,7 @@ const MATERIALS = [
 
 function Triptych() {
   return (
-    <section id="concept-2" className="on-dark relative isolate flex min-h-[100svh] flex-col bg-navy-950 text-white lg:flex-row">
+    <section data-hc id="concept-2" className="on-dark relative isolate flex min-h-[100svh] flex-col bg-navy-950 text-white lg:flex-row">
       <Nav />
       <div className="relative z-10 flex flex-col justify-center px-5 pt-32 pb-12 sm:px-8 lg:w-[42%] lg:pt-24 lg:pr-14 lg:pb-24 lg:pl-[max(2rem,calc((100vw-80rem)/2+2rem))]">
         <span className="hc-grain pointer-events-none absolute inset-0 -z-10" aria-hidden />
@@ -301,7 +300,7 @@ function Triptych() {
             <span className="hc-reveal block overflow-hidden">
               <span className="mt-4 flex flex-wrap gap-2">
                 {m.items.map((it) => (
-                  <span key={it} className="rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs whitespace-nowrap text-white/80 backdrop-blur">
+                  <span key={it} className="rounded-full border border-white/20 bg-navy-950/60 px-3 py-1 text-xs whitespace-nowrap text-white/80">
                     {it}
                   </span>
                 ))}
@@ -320,7 +319,7 @@ function Triptych() {
 function Arch() {
   const row = "Stainless Steel · Copper · Raw Materials · ";
   return (
-    <section id="concept-3" className="relative isolate flex min-h-[100svh] flex-col items-center overflow-hidden bg-ivory text-navy-900">
+    <section data-hc id="concept-3" className="relative isolate flex min-h-[100svh] flex-col items-center overflow-hidden bg-ivory text-navy-900">
       <Nav light />
       {[
         { top: "top-[16%]", cls: "hc-row" },
@@ -386,12 +385,12 @@ function LiquidMetal() {
     { t: "Meetings", s: "You only talk to qualified, interested buyers." },
   ];
   return (
-    <section id="concept-4" className="relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-navy-950 text-white">
+    <section data-hc id="concept-4" className="relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-navy-950 text-white">
       <Nav />
       <div className="absolute inset-0 -z-20" aria-hidden>
-        <span className="hc-blob absolute -top-[18%] -right-[12%] h-[60vw] max-h-[900px] w-[60vw] max-w-[900px] rounded-full bg-[#e0a447]/35 blur-[120px]" />
-        <span className="hc-blob hc-blob-2 absolute -bottom-[25%] left-[18%] h-[48vw] max-h-[760px] w-[48vw] max-w-[760px] rounded-full bg-[#c4602c]/45 blur-[120px]" />
-        <span className="hc-blob hc-blob-3 absolute top-[25%] -left-[18%] h-[42vw] max-h-[680px] w-[42vw] max-w-[680px] rounded-full bg-navy-500/70 blur-[110px]" />
+        <span className="hc-blob absolute -top-[18%] -right-[12%] h-[60vw] max-h-[900px] w-[60vw] max-w-[900px] bg-[radial-gradient(closest-side,rgb(224_164_71/0.38),transparent)]" />
+        <span className="hc-blob hc-blob-2 absolute -bottom-[25%] left-[18%] h-[48vw] max-h-[760px] w-[48vw] max-w-[760px] bg-[radial-gradient(closest-side,rgb(196_96_44/0.45),transparent)]" />
+        <span className="hc-blob hc-blob-3 absolute top-[25%] -left-[18%] h-[42vw] max-h-[680px] w-[42vw] max-w-[680px] bg-[radial-gradient(closest-side,rgb(43_77_119/0.75),transparent)]" />
       </div>
       <div className="hc-grain pointer-events-none absolute inset-0 -z-10" aria-hidden />
       <div className="container-x pointer-events-none absolute inset-y-0 left-0 right-0 -z-10 grid grid-cols-4" aria-hidden>
@@ -444,7 +443,7 @@ const SIGNALS = [
 function Signal() {
   const corner = "absolute h-6 w-6 border-gold-400/70";
   return (
-    <section id="concept-5" className="on-dark relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-navy-950 text-white">
+    <section data-hc id="concept-5" className="on-dark relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-navy-950 text-white">
       <Nav />
       <Image src="/images/port-cranes-night.webp" alt="" fill quality={60} sizes="100vw" className="ken-burns -z-30 object-cover object-[65%_50%]" />
       <div className="absolute inset-0 -z-20 bg-[linear-gradient(90deg,#050d18_0%,rgba(5,13,24,0.82)_38%,rgba(5,13,24,0.2)_72%,rgba(5,13,24,0.45)_100%)]" aria-hidden />
@@ -517,6 +516,7 @@ export default function HeroConceptsPage() {
   return (
     <main className="bg-navy-950">
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
+      <ActiveSections />
       <header className="border-b border-white/10 bg-navy-950 text-white">
         <div className="container-x flex flex-col gap-4 py-5 md:flex-row md:items-center md:justify-between">
           <div>
